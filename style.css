@@ -3,9 +3,7 @@
    PORTFOLIO STYLES
 ===================================== */
 
-
 :root {
-
     --black: #070a0d;
     --dark: #0b1015;
     --card: #10161d;
@@ -25,290 +23,184 @@
 
     --code: "Fira Code", monospace;
     --font: "Inter", sans-serif;
-
 }
-
 
 
 /* =====================================
    RESET
 ===================================== */
 
-
 * {
-
     margin: 0;
     padding: 0;
-
     box-sizing: border-box;
-
 }
-
 
 html {
-
     scroll-behavior: smooth;
-
 }
-
 
 body {
-
     background: var(--black);
-
     color: var(--white);
-
     font-family: var(--font);
-
     line-height: 1.7;
-
     overflow-x: hidden;
-
 }
-
 
 a {
-
     text-decoration: none;
-
     color: inherit;
-
 }
 
+img {
+    max-width: 100%;
+}
 
 ::selection {
-
     background: var(--green);
-
     color: #000;
-
 }
-
 
 
 /* =====================================
    NAVBAR
 ===================================== */
 
-
 .navbar {
-
     position: fixed;
-
     top: 0;
     left: 0;
-
     width: 100%;
-
     height: 70px;
-
     z-index: 999;
 
     background: rgba(7, 10, 13, .85);
-
     backdrop-filter: blur(15px);
 
     border-bottom: 1px solid rgba(255,255,255,.05);
-
 }
 
-
 .nav-container {
-
     max-width: 1150px;
-
     height: 100%;
-
     margin: auto;
-
     padding: 0 25px;
 
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
 }
-
 
 .logo {
-
     font-family: var(--code);
-
     font-weight: 600;
-
     font-size: 20px;
-
 }
-
 
 .logo span {
-
     color: var(--green);
-
 }
-
 
 .nav-links {
-
     display: flex;
-
     gap: 30px;
-
 }
-
 
 .nav-links a {
-
     color: var(--gray);
-
     font-family: var(--code);
-
     font-size: 13px;
-
     transition: .3s;
-
 }
-
 
 .nav-links a:hover {
-
     color: var(--green);
-
 }
-
 
 .menu-btn {
-
     display: none;
-
     font-size: 25px;
-
     color: var(--green);
-
     cursor: pointer;
-
 }
-
 
 
 /* =====================================
    HERO
 ===================================== */
 
-
 .hero {
-
     min-height: 100vh;
 
     display: flex;
-
     align-items: center;
 
     position: relative;
 
     padding: 110px 25px 70px;
-
 }
 
-
 .hero-content {
-
     width: 100%;
-
     max-width: 1150px;
-
     margin: auto;
 
     display: grid;
-
     grid-template-columns: 1.4fr .6fr;
 
     gap: 80px;
 
     align-items: center;
-
 }
-
 
 
 /* =====================================
    HERO TEXT
 ===================================== */
 
-
 .terminal {
-
     font-family: var(--code);
-
     font-size: 13px;
-
     color: var(--gray);
-
     margin-bottom: 25px;
-
 }
-
 
 .terminal-green {
-
     color: var(--green);
-
 }
-
 
 .terminal-blue {
-
     color: var(--blue);
-
 }
-
 
 .typing {
-
     color: var(--white);
-
 }
-
 
 .hello {
-
     color: var(--gray);
-
     font-size: 15px;
-
     margin-bottom: 5px;
-
 }
 
-
 .hero h1 {
-
     font-family: var(--code);
-
     text-transform: uppercase;
 
     font-size: clamp(40px, 6vw, 70px);
 
     line-height: 1.05;
-
     letter-spacing: -3px;
 
     margin-bottom: 20px;
-
 }
-
 
 .hero h1 span {
-
     color: var(--green);
-
 }
 
-
 .role {
-
     color: var(--blue);
 
     font-family: var(--code);
@@ -316,49 +208,36 @@ a {
     font-size: 15px;
 
     margin-bottom: 18px;
-
 }
 
-
 .intro {
-
     max-width: 600px;
 
     color: var(--gray);
 
     font-size: 15px;
-
 }
-
 
 
 /* =====================================
    STUDENT INFO
 ===================================== */
 
-
 .student-info {
-
     display: flex;
 
     gap: 35px;
 
     margin: 28px 0;
-
 }
 
-
 .info-item {
-
     padding-left: 13px;
 
     border-left: 2px solid var(--green);
-
 }
 
-
 .info-item small {
-
     display: block;
 
     color: var(--gray-dark);
@@ -366,104 +245,71 @@ a {
     font-family: var(--code);
 
     font-size: 10px;
-
 }
 
-
 .info-item strong {
-
     font-family: var(--code);
 
     font-size: 13px;
-
 }
-
 
 
 /* =====================================
    BUTTONS
 ===================================== */
 
-
 .hero-buttons {
-
     display: flex;
-
     gap: 12px;
-
 }
 
-
 .btn {
-
     display: inline-block;
 
     padding: 10px 20px;
 
     font-family: var(--code);
-
     font-size: 12px;
 
     border-radius: 4px;
 
     transition: .3s ease;
-
 }
-
 
 .main-btn {
-
     background: var(--green);
-
     color: #000;
-
 }
 
-
 .main-btn:hover {
-
     background: var(--green-soft);
 
     transform: translateY(-3px);
-
 }
 
-
 .outline-btn {
-
     border: 1px solid var(--border);
 
     color: var(--white);
-
 }
 
-
 .outline-btn:hover {
-
     border-color: var(--green);
 
     color: var(--green);
-
 }
-
 
 
 /* =====================================
    PHOTO
 ===================================== */
 
-
 .hero-photo {
-
     display: flex;
-
     justify-content: center;
-
 }
 
-
 .photo-frame {
-
     width: 255px;
 
     padding: 8px;
@@ -477,21 +323,15 @@ a {
     box-shadow: 0 25px 60px rgba(0,0,0,.45);
 
     transition: .5s ease;
-
 }
 
-
 .photo-frame:hover {
-
     transform: translateY(-7px);
 
     border-color: rgba(0,232,135,.4);
-
 }
 
-
 .photo-top {
-
     height: 23px;
 
     display: flex;
@@ -501,40 +341,29 @@ a {
     gap: 6px;
 
     padding-left: 5px;
-
 }
 
-
 .dot {
-
     width: 8px;
-
     height: 8px;
 
     border-radius: 50%;
-
 }
-
 
 .red {
     background: #ff5f56;
 }
 
-
 .yellow {
     background: #ffbd2e;
 }
-
 
 .green {
     background: #27c93f;
 }
 
-
 .photo-wrapper {
-
     width: 100%;
-
     height: 295px;
 
     overflow: hidden;
@@ -542,14 +371,10 @@ a {
     border-radius: 4px;
 
     background: #050709;
-
 }
 
-
 .photo-wrapper img {
-
     width: 100%;
-
     height: 100%;
 
     object-fit: cover;
@@ -559,19 +384,13 @@ a {
     filter: saturate(.85);
 
     transition: .6s ease;
-
 }
-
 
 .photo-frame:hover img {
-
     transform: scale(1.03);
-
 }
 
-
 .photo-caption {
-
     display: flex;
 
     gap: 7px;
@@ -583,29 +402,21 @@ a {
     font-size: 10px;
 
     color: var(--gray-dark);
-
 }
-
 
 .green-text {
-
     color: var(--green);
-
 }
-
 
 
 /* =====================================
    SCROLL
 ===================================== */
 
-
 .scroll-indicator {
-
     position: absolute;
 
     bottom: 30px;
-
     left: 50%;
 
     transform: translateX(-50%);
@@ -623,12 +434,9 @@ a {
     font-family: var(--code);
 
     font-size: 9px;
-
 }
 
-
 .scroll-line {
-
     width: 1px;
 
     height: 30px;
@@ -637,42 +445,38 @@ a {
         var(--green),
         transparent
     );
-
 }
-
 
 
 /* =====================================
    SECTIONS
 ===================================== */
 
-
 .section {
-
     max-width: 1150px;
 
     margin: auto;
 
     padding: 110px 25px;
-
 }
-
 
 .dark {
-
     max-width: none;
 
-    padding-left: max(25px, calc((100% - 1100px) / 2));
+    padding-left: max(
+        25px,
+        calc((100% - 1100px) / 2)
+    );
 
-    padding-right: max(25px, calc((100% - 1100px) / 2));
+    padding-right: max(
+        25px,
+        calc((100% - 1100px) / 2)
+    );
 
     background: var(--dark);
-
 }
 
-
 .section-heading {
-
     display: flex;
 
     align-items: center;
@@ -680,32 +484,23 @@ a {
     gap: 13px;
 
     margin-bottom: 40px;
-
 }
 
-
 .section-heading span {
-
     font-family: var(--code);
 
     font-size: 13px;
 
     color: var(--green);
-
 }
 
-
 .section-heading h2 {
-
     font-family: var(--code);
 
     font-size: 28px;
-
 }
 
-
 .section-subtitle {
-
     color: var(--gray);
 
     margin-top: -25px;
@@ -713,18 +508,14 @@ a {
     margin-bottom: 35px;
 
     font-size: 14px;
-
 }
-
 
 
 /* =====================================
    ABOUT
 ===================================== */
 
-
 .about-grid {
-
     display: grid;
 
     grid-template-columns: 1fr 1fr;
@@ -732,46 +523,31 @@ a {
     gap: 70px;
 
     align-items: center;
-
 }
 
-
 .about-text {
-
     color: var(--gray);
 
     font-size: 14px;
-
 }
-
 
 .about-text p {
-
     margin-bottom: 18px;
-
 }
-
 
 .about-text strong {
-
     color: var(--white);
-
 }
 
-
 .code-comment {
-
     color: var(--gray-dark);
 
     font-family: var(--code);
 
     font-size: 12px;
-
 }
 
-
 .quote {
-
     border-left: 2px solid var(--green);
 
     padding: 12px 18px;
@@ -783,12 +559,9 @@ a {
     background: rgba(0,232,135,.025);
 
     margin-top: 25px;
-
 }
 
-
 .code-window {
-
     background: #050709;
 
     border: 1px solid var(--border);
@@ -796,12 +569,9 @@ a {
     border-radius: 7px;
 
     overflow: hidden;
-
 }
 
-
 .window-bar {
-
     height: 35px;
 
     border-bottom: 1px solid var(--border);
@@ -813,25 +583,18 @@ a {
     align-items: center;
 
     padding-left: 13px;
-
 }
 
-
 .window-bar span {
-
     width: 7px;
-
     height: 7px;
 
     border-radius: 50%;
 
     background: var(--gray-dark);
-
 }
 
-
 .code-window pre {
-
     padding: 25px;
 
     overflow-x: auto;
@@ -841,44 +604,34 @@ a {
     font-size: 12px;
 
     line-height: 1.9;
-
 }
-
 
 .purple {
     color: var(--purple);
 }
 
-
 .blue {
     color: var(--blue);
 }
-
 
 .orange {
     color: var(--orange);
 }
 
 
-
 /* =====================================
    SKILLS
 ===================================== */
 
-
 .skills-grid {
-
     display: grid;
 
     grid-template-columns: repeat(3, 1fr);
 
     gap: 15px;
-
 }
 
-
 .skill {
-
     padding: 25px;
 
     background: var(--card);
@@ -888,21 +641,15 @@ a {
     border-radius: 5px;
 
     transition: .4s ease;
-
 }
 
-
 .skill:hover {
-
     transform: translateY(-5px);
 
     border-color: rgba(0,232,135,.35);
-
 }
 
-
 .skill-number {
-
     color: var(--green);
 
     font-family: var(--code);
@@ -910,45 +657,32 @@ a {
     font-size: 11px;
 
     margin-bottom: 18px;
-
 }
 
-
 .skill h3 {
-
     font-family: var(--code);
 
     font-size: 16px;
 
     margin-bottom: 8px;
-
 }
 
-
 .skill p {
-
     color: var(--gray);
 
     font-size: 13px;
-
 }
-
 
 
 /* =====================================
    ACADEMIC WORK
 ===================================== */
 
-
 .academic-category {
-
     margin-bottom: 60px;
-
 }
 
-
 .category-heading {
-
     display: flex;
 
     align-items: center;
@@ -956,194 +690,161 @@ a {
     gap: 12px;
 
     margin-bottom: 8px;
-
 }
 
-
 .category-number {
-
     color: var(--green);
 
     font-family: var(--code);
 
     font-size: 12px;
-
 }
 
-
 .category-heading h3 {
-
     font-family: var(--code);
 
     font-size: 20px;
 
     color: var(--white);
-
 }
 
-
 .category-description {
-
     color: var(--gray);
 
     font-size: 13px;
 
     margin-bottom: 20px;
-
 }
 
-
 .academic-category:not(:last-child) {
-
     padding-bottom: 45px;
 
     border-bottom: 1px solid var(--border);
-
 }
 
 
-
 /* =====================================
-   UPLOAD BOX
+   ACADEMIC IMAGE GRID
 ===================================== */
 
+.quiz-grid {
+    display: grid;
 
-.upload-box {
+    grid-template-columns: repeat(3, 1fr);
 
-    display: flex;
+    gap: 18px;
 
-    align-items: center;
+    margin-top: 20px;
+}
 
-    gap: 20px;
 
-    padding: 25px;
+/* =====================================
+   ACADEMIC CARD
+===================================== */
 
-    border: 1px dashed #303a44;
+.academic-card {
+    background: var(--card);
+
+    border: 1px solid var(--border);
 
     border-radius: 6px;
 
-    transition: .4s ease;
+    overflow: hidden;
 
-}
-
-
-.upload-box:hover {
-
-    border-color: var(--green);
-
-    background: rgba(0,232,135,.02);
-
-}
-
-
-.academic-category .upload-box {
-
-    background: rgba(16, 22, 29, .35);
-
-}
-
-
-.academic-category .upload-box:hover {
-
-    background: rgba(0,232,135,.025);
-
-}
-
-
-.upload-symbol {
-
-    width: 40px;
-
-    height: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border: 1px solid var(--border);
-
-    color: var(--green);
-
-    font-size: 25px;
-
-    border-radius: 4px;
-
-}
-
-
-.upload-box h3 {
-
-    font-family: var(--code);
-
-    font-size: 14px;
-
-}
-
-
-.upload-box p {
-
-    color: var(--gray);
-
-    font-size: 12px;
-
-}
-
-
-.upload-button {
-
-    margin-left: auto;
+    transition:
+        transform .4s ease,
+        border-color .4s ease,
+        box-shadow .4s ease;
 
     cursor: pointer;
-
-    padding: 9px 15px;
-
-    border: 1px solid var(--border);
-
-    color: var(--green);
-
-    font-family: var(--code);
-
-    font-size: 11px;
-
-    border-radius: 4px;
-
-    transition: .3s;
-
 }
 
+.academic-card:hover {
+    transform: translateY(-6px);
 
-.upload-button:hover {
+    border-color: rgba(0,232,135,.45);
 
-    border-color: var(--green);
-
-    background: rgba(0,232,135,.05);
-
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35),
+        0 0 20px rgba(0,232,135,.04);
 }
-
 
 
 /* =====================================
-   FILE GRID
+   ACADEMIC CARD IMAGE
 ===================================== */
 
+.academic-card img {
+    width: 100%;
 
-.quiz-grid {
+    height: 250px;
 
-    display: grid;
+    display: block;
 
-    grid-template-columns: repeat(3,1fr);
+    object-fit: cover;
 
-    gap: 15px;
+    object-position: center;
 
-    margin-top: 20px;
+    background: #050709;
 
+    transition:
+        transform .5s ease,
+        filter .5s ease;
+}
+
+.academic-card:hover img {
+    transform: scale(1.03);
+
+    filter: brightness(1.08);
 }
 
 
-.empty {
+/* =====================================
+   ACADEMIC CARD CONTENT
+===================================== */
 
+.academic-card-content {
+    padding: 17px 18px 20px;
+}
+
+.academic-card-content > span {
+    display: block;
+
+    color: var(--green);
+
+    font-family: var(--code);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
+
+    text-transform: uppercase;
+}
+
+.academic-card-content h3 {
+    font-family: var(--code);
+
+    color: var(--white);
+
+    font-size: 14px;
+
+    margin-bottom: 5px;
+}
+
+.academic-card-content p {
+    color: var(--gray);
+
+    font-size: 11px;
+}
+
+
+/* =====================================
+   EMPTY STATE
+===================================== */
+
+.empty {
     grid-column: 1 / -1;
 
     text-align: center;
@@ -1153,27 +854,20 @@ a {
     border: 1px solid var(--border);
 
     color: var(--gray);
-
 }
 
-
 .empty span {
-
     color: var(--green);
 
     font-size: 28px;
-
 }
 
 
-
 /* =====================================
-   FILE CARD
+   OPTIONAL OLD FILE CARD
 ===================================== */
 
-
 .quiz-card {
-
     padding: 20px;
 
     background: var(--card);
@@ -1183,61 +877,43 @@ a {
     border-radius: 5px;
 
     transition: .4s;
-
 }
 
-
 .quiz-card:hover {
-
     transform: translateY(-4px);
 
     border-color: rgba(0,232,135,.35);
-
 }
 
-
 .quiz-file-icon {
-
     font-size: 25px;
 
     margin-bottom: 12px;
-
 }
 
-
 .quiz-card h3 {
-
     font-family: var(--code);
 
     font-size: 13px;
 
     word-break: break-word;
-
 }
 
-
 .quiz-card p {
-
     color: var(--gray);
 
     font-size: 11px;
 
     margin-bottom: 15px;
-
 }
 
-
 .quiz-actions {
-
     display: flex;
 
     gap: 7px;
-
 }
 
-
 .quiz-actions button {
-
     flex: 1;
 
     padding: 7px;
@@ -1257,47 +933,34 @@ a {
     border-radius: 3px;
 
     transition: .3s;
-
 }
 
-
 .quiz-actions button:hover {
-
     border-color: var(--green);
 
     color: var(--green);
-
 }
 
-
 .quiz-actions .delete-btn:hover {
-
     border-color: #ff5f56;
 
     color: #ff5f56;
-
 }
-
 
 
 /* =====================================
    PROJECTS
 ===================================== */
 
-
 .projects-grid {
-
     display: grid;
 
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 15px;
-
 }
 
-
 .project {
-
     padding: 28px;
 
     border: 1px solid var(--border);
@@ -1305,21 +968,15 @@ a {
     background: var(--card);
 
     transition: .4s;
-
 }
 
-
 .project:hover {
-
     transform: translateY(-5px);
 
     border-color: rgba(0,232,135,.35);
-
 }
 
-
 .project-number {
-
     color: var(--green);
 
     font-family: var(--code);
@@ -1327,97 +984,71 @@ a {
     font-size: 11px;
 
     margin-bottom: 30px;
-
 }
 
-
 .project h3 {
-
     font-family: var(--code);
 
     font-size: 15px;
 
     margin-bottom: 12px;
-
 }
 
-
 .project p {
-
     color: var(--gray);
 
     font-size: 13px;
 
     margin-bottom: 20px;
-
 }
 
-
 .project-tech {
-
     color: var(--gray-dark);
 
     font-family: var(--code);
 
     font-size: 10px;
-
 }
 
-
 .project-tech span {
-
     color: var(--green);
 
     margin: 0 5px;
-
 }
-
 
 
 /* =====================================
    CONTACT
 ===================================== */
 
-
 .contact {
-
     text-align: center;
 
     max-width: 700px;
-
 }
 
-
 .contact-content h2 {
-
     font-family: var(--code);
 
     font-size: 40px;
 
     margin: 15px 0;
-
 }
 
-
 .contact-content p {
-
     color: var(--gray);
 
     font-size: 14px;
 
     margin-bottom: 25px;
-
 }
-
 
 
 /* =====================================
    FOOTER
 ===================================== */
 
-
 footer {
-
     border-top: 1px solid var(--border);
 
     text-align: center;
@@ -1429,186 +1060,130 @@ footer {
     font-family: var(--code);
 
     font-size: 11px;
-
 }
-
 
 footer span {
-
     color: var(--green);
-
 }
 
-
 footer small {
-
     display: block;
 
     margin-top: 5px;
-
 }
-
 
 
 /* =====================================
    SMOOTH REVEAL ANIMATION
 ===================================== */
 
-
 .reveal {
-
     opacity: 0;
 
     transform: translateY(35px);
 
     transition:
-
         opacity .8s ease,
-
         transform .8s ease;
-
 }
 
-
 .reveal-left {
-
     opacity: 0;
 
     transform: translateX(-45px);
 
     transition:
-
         opacity .9s ease,
-
         transform .9s ease;
-
 }
 
-
 .reveal-right {
-
     opacity: 0;
 
     transform: translateX(45px);
 
     transition:
-
         opacity .9s ease,
-
         transform .9s ease;
-
 }
-
 
 .reveal.show,
 .reveal-left.show,
 .reveal-right.show {
-
     opacity: 1;
 
     transform: translate(0);
-
 }
-
 
 
 /* =====================================
    RESPONSIVE
 ===================================== */
 
-
 @media(max-width: 900px) {
 
-
     .hero-content {
-
         grid-template-columns: 1fr;
 
         gap: 50px;
-
     }
-
 
     .hero-text {
-
         text-align: center;
-
     }
-
 
     .intro {
-
         margin: auto;
-
     }
-
 
     .student-info {
-
         justify-content: center;
-
     }
-
 
     .hero-buttons {
-
         justify-content: center;
-
     }
-
 
     .hero-photo {
-
         order: -1;
-
     }
-
 
     .photo-frame {
-
         width: 210px;
-
     }
-
 
     .photo-wrapper {
-
         height: 245px;
-
     }
-
 
     .about-grid {
-
         grid-template-columns: 1fr;
-
     }
-
 
     .skills-grid,
     .quiz-grid,
     .projects-grid {
-
-        grid-template-columns: repeat(2,1fr);
-
+        grid-template-columns: repeat(2, 1fr);
     }
 
-
+    .academic-card img {
+        height: 230px;
+    }
 }
 
 
+/* =====================================
+   MOBILE
+===================================== */
 
 @media(max-width: 650px) {
 
-
     .nav-links {
-
         display: none;
 
         position: absolute;
 
         top: 70px;
-
         left: 0;
 
         width: 100%;
@@ -1620,118 +1195,98 @@ footer small {
         padding: 25px;
 
         border-bottom: 1px solid var(--border);
-
     }
-
 
     .nav-links.active {
-
         display: flex;
-
     }
-
 
     .menu-btn {
-
         display: block;
-
     }
-
 
     .hero {
-
         padding-top: 100px;
-
     }
 
-
     .hero h1 {
-
         font-size: 38px;
 
         letter-spacing: -2px;
-
     }
 
-
     .student-info {
-
         flex-direction: column;
 
         align-items: center;
 
         gap: 12px;
-
     }
-
 
     .skills-grid,
     .quiz-grid,
     .projects-grid {
-
         grid-template-columns: 1fr;
-
     }
-
-
-    .upload-box {
-
-        flex-wrap: wrap;
-
-    }
-
-
-    .upload-button {
-
-        margin-left: 0;
-
-        width: 100%;
-
-        text-align: center;
-
-    }
-
 
     .section {
-
         padding: 80px 20px;
-
     }
-
 
     .contact-content h2 {
-
         font-size: 30px;
-
     }
-
 
     .academic-category {
-
         margin-bottom: 45px;
-
     }
-
 
     .category-heading h3 {
-
         font-size: 17px;
-
     }
-
 
     .category-description {
-
         font-size: 12px;
-
     }
-
 
     .academic-category:not(:last-child) {
-
         padding-bottom: 35px;
-
     }
 
+    /* Academic images on phone */
+    .academic-card img {
+        height: 260px;
+    }
 
+    .academic-card-content {
+        padding: 15px;
+    }
+
+    .academic-card-content h3 {
+        font-size: 13px;
+    }
+}
+
+
+/* =====================================
+   VERY SMALL PHONES
+===================================== */
+
+@media(max-width: 400px) {
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .photo-frame {
+        width: 190px;
+    }
+
+    .photo-wrapper {
+        height: 225px;
+    }
+
+    .academic-card img {
+        height: 230px;
+    }
 }
