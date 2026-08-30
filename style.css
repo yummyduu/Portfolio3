@@ -49,6 +49,10 @@ body {
     overflow-x: hidden;
 }
 
+body.viewer-open {
+    overflow: hidden;
+}
+
 a {
     color: inherit;
     text-decoration: none;
@@ -56,6 +60,10 @@ a {
 
 img {
     max-width: 100%;
+}
+
+button {
+    font-family: inherit;
 }
 
 ::selection {
@@ -81,7 +89,6 @@ img {
     background: rgba(7, 10, 13, 0.88);
 
     backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -422,7 +429,7 @@ img {
 
 
 /* =====================================
-   SCROLL INDICATOR
+   SCROLL
 ===================================== */
 
 .scroll-indicator {
@@ -902,6 +909,189 @@ img {
 
 
 /* =====================================
+   CLICKABLE ACADEMIC IMAGE
+===================================== */
+
+.academic-image img {
+    cursor: zoom-in;
+}
+
+.academic-image img:active {
+    cursor: zoom-out;
+}
+
+
+/* =====================================
+   FULLSCREEN IMAGE VIEWER
+===================================== */
+
+.image-viewer {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    width: 100vw;
+    height: 100vh;
+
+    padding: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.94);
+
+    backdrop-filter: blur(12px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.image-viewer.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =====================================
+   VIEWER CONTENT
+===================================== */
+
+.image-viewer-content {
+    position: relative;
+
+    max-width: 95vw;
+    max-height: 92vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    transform: scale(0.85);
+
+    transition:
+        transform 0.3s ease;
+}
+
+.image-viewer.active .image-viewer-content {
+    transform: scale(1);
+}
+
+
+/* =====================================
+   ZOOMED IMAGE
+===================================== */
+
+.image-viewer-content img {
+    display: block;
+
+    max-width: 90vw;
+    max-height: 82vh;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+
+    border-radius: 6px;
+
+    border: 1px solid rgba(0, 232, 135, 0.35);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.75),
+        0 0 40px rgba(0, 232, 135, 0.08);
+
+    background: #050709;
+}
+
+
+/* =====================================
+   VIEWER CAPTION
+===================================== */
+
+.image-viewer-content p {
+    margin-top: 14px;
+
+    color: var(--gray);
+
+    font-family: var(--code);
+
+    font-size: 11px;
+
+    text-align: center;
+}
+
+
+/* =====================================
+   VIEWER CLOSE BUTTON
+===================================== */
+
+.image-viewer-close {
+    position: fixed;
+
+    top: 25px;
+    right: 30px;
+
+    z-index: 10001;
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    color: var(--white);
+
+    background: rgba(16, 22, 29, 0.9);
+
+    border: 1px solid var(--border);
+
+    border-radius: 50%;
+
+    font-size: 30px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        color 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.image-viewer-close:hover {
+    color: var(--green);
+
+    border-color: var(--green);
+
+    background: var(--card);
+
+    transform: rotate(90deg);
+}
+
+
+/* =====================================
    PROJECTS
 ===================================== */
 
@@ -1070,275 +1260,6 @@ footer small {
 
 
 /* =====================================
-   FULLSCREEN ACADEMIC IMAGE VIEWER
-===================================== */
-
-/*
-   IMPORTANT:
-   This makes the zoomed photo appear
-   OVER the page instead of at the bottom.
-*/
-
-body.image-viewer-open {
-    overflow: hidden;
-}
-
-
-/* =====================================
-   VIEWER OVERLAY
-===================================== */
-
-.image-viewer {
-    position: fixed;
-
-    inset: 0;
-
-    width: 100vw;
-    height: 100vh;
-
-    z-index: 99999;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 30px;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
-}
-
-
-/* OPEN STATE */
-
-.image-viewer.active {
-    opacity: 1;
-
-    visibility: visible;
-}
-
-
-/* =====================================
-   VIEWER BACKGROUND
-===================================== */
-
-.image-viewer-backdrop {
-    position: absolute;
-
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.93);
-
-    backdrop-filter: blur(8px);
-
-    -webkit-backdrop-filter: blur(8px);
-
-    cursor: zoom-out;
-}
-
-
-/* =====================================
-   VIEWER CONTENT
-===================================== */
-
-.image-viewer-content {
-    position: relative;
-
-    z-index: 2;
-
-    max-width: 95vw;
-
-    max-height: 95vh;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    transform: scale(0.92);
-
-    transition:
-        transform 0.25s ease;
-}
-
-
-/* ANIMATION WHEN OPEN */
-
-.image-viewer.active
-.image-viewer-content {
-    transform: scale(1);
-}
-
-
-/* =====================================
-   ZOOMED IMAGE
-===================================== */
-
-.image-viewer-image {
-    display: block;
-
-    max-width: 90vw;
-
-    max-height: 82vh;
-
-    width: auto;
-
-    height: auto;
-
-    object-fit: contain;
-
-    border-radius: 6px;
-
-    border: 1px solid
-        rgba(0, 232, 135, 0.3);
-
-    background: #050709;
-
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.8),
-        0 0 35px rgba(0, 232, 135, 0.08);
-
-    cursor: default;
-
-    user-select: none;
-
-    -webkit-user-drag: none;
-}
-
-
-/* =====================================
-   CLOSE BUTTON
-===================================== */
-
-.image-viewer-close {
-    position: absolute;
-
-    top: -18px;
-
-    right: -18px;
-
-    z-index: 5;
-
-    width: 42px;
-
-    height: 42px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 0;
-
-    color: var(--white);
-
-    background: rgba(7, 10, 13, 0.97);
-
-    border: 1px solid var(--border);
-
-    border-radius: 50%;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 28px;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        color 0.25s ease,
-        background 0.25s ease,
-        border-color 0.25s ease,
-        transform 0.25s ease;
-}
-
-.image-viewer-close:hover {
-    color: #000;
-
-    background: var(--green);
-
-    border-color: var(--green);
-
-    transform: rotate(90deg);
-}
-
-
-/* =====================================
-   IMAGE CAPTION
-===================================== */
-
-.image-viewer-caption {
-    margin-top: 14px;
-
-    padding: 7px 12px;
-
-    color: var(--gray);
-
-    background: rgba(7, 10, 13, 0.9);
-
-    border: 1px solid var(--border);
-
-    border-radius: 4px;
-
-    font-family: var(--code);
-
-    font-size: 11px;
-
-    text-align: center;
-}
-
-
-/* =====================================
-   MOBILE VIEWER
-===================================== */
-
-@media (max-width: 650px) {
-
-    .image-viewer {
-        padding: 18px;
-    }
-
-    .image-viewer-image {
-        max-width: 94vw;
-
-        max-height: 78vh;
-
-        border-radius: 4px;
-    }
-
-    .image-viewer-close {
-        top: -12px;
-
-        right: -8px;
-
-        width: 38px;
-
-        height: 38px;
-
-        font-size: 24px;
-    }
-
-    .image-viewer-caption {
-        max-width: 90vw;
-
-        font-size: 10px;
-    }
-
-}
-
-
-/* =====================================
    TABLET
 ===================================== */
 
@@ -1392,6 +1313,14 @@ body.image-viewer-open {
         height: 250px;
     }
 
+    .image-viewer {
+        padding: 25px;
+    }
+
+    .image-viewer-content img {
+        max-width: 92vw;
+        max-height: 80vh;
+    }
 }
 
 
@@ -1407,7 +1336,6 @@ body.image-viewer-open {
         position: absolute;
 
         top: 70px;
-
         left: 0;
 
         width: 100%;
@@ -1477,6 +1405,42 @@ body.image-viewer-open {
         height: 280px;
     }
 
+
+    /* MOBILE IMAGE VIEWER */
+
+    .image-viewer {
+        padding: 15px;
+    }
+
+    .image-viewer-content {
+        width: 100%;
+
+        max-width: 100%;
+        max-height: 90vh;
+    }
+
+    .image-viewer-content img {
+        max-width: 94vw;
+        max-height: 78vh;
+
+        border-radius: 4px;
+    }
+
+    .image-viewer-close {
+        top: 15px;
+        right: 15px;
+
+        width: 40px;
+        height: 40px;
+
+        font-size: 26px;
+    }
+
+    .image-viewer-content p {
+        max-width: 90vw;
+
+        font-size: 9px;
+    }
 }
 
 
@@ -1502,4 +1466,28 @@ body.image-viewer-open {
         height: 240px;
     }
 
+    .image-viewer-content img {
+        max-width: 96vw;
+        max-height: 75vh;
+    }
+}
+
+
+/* =====================================
+   REDUCED MOTION
+===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
