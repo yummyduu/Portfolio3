@@ -1,7 +1,6 @@
 /* =====================================
    TRISTAN TEOXON PORTFOLIO
    JAVASCRIPT
-   ACADEMIC IMAGE ZOOM + MOBILE MENU
 ===================================== */
 
 
@@ -18,13 +17,15 @@ if (menuButton && navLinks) {
         navLinks.classList.toggle("active");
     });
 
-    document.querySelectorAll(".nav-links a").forEach(link => {
+    document
+        .querySelectorAll(".nav-links a")
+        .forEach(link => {
 
-        link.addEventListener("click", () => {
-            navLinks.classList.remove("active");
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+            });
+
         });
-
-    });
 }
 
 
@@ -39,6 +40,7 @@ const revealElements = document.querySelectorAll(
 if ("IntersectionObserver" in window) {
 
     const observer = new IntersectionObserver(
+
         (entries) => {
 
             entries.forEach(entry => {
@@ -54,61 +56,29 @@ if ("IntersectionObserver" in window) {
             });
 
         },
+
         {
             threshold: 0.12
         }
+
     );
 
     revealElements.forEach(element => {
         observer.observe(element);
     });
 
-} else {
-
-    revealElements.forEach(element => {
-        element.classList.add("show");
-    });
-
 }
 
 
 /* =====================================
-   ACADEMIC WORK IMAGE ZOOM
+   ACADEMIC PHOTO VIEWER
 ===================================== */
-
-/*
-    This selects ALL images inside:
-
-    .academic-card
-
-    So it automatically works for:
-
-    - Laboratories
-    - Quizzes
-    - Midterms
-    - Finals
-    - Future academic work
-*/
 
 const academicImages = document.querySelectorAll(
     ".academic-card .academic-image img"
 );
 
-
-/* =====================================
-   MAKE ACADEMIC PHOTOS CLICKABLE
-===================================== */
-
 academicImages.forEach(image => {
-
-    // Make it obvious that the image is clickable
-    image.style.cursor = "zoom-in";
-
-    image.setAttribute(
-        "title",
-        "Click to view and zoom"
-    );
-
 
     image.addEventListener("click", function (event) {
 
@@ -126,57 +96,21 @@ academicImages.forEach(image => {
 
 
 /* =====================================
-   IMAGE VIEWER VARIABLES
-===================================== */
-
-let currentViewer = null;
-let currentImage = null;
-
-let zoomLevel = 1;
-
-let translateX = 0;
-let translateY = 0;
-
-let isDragging = false;
-
-let startX = 0;
-let startY = 0;
-
-let initialX = 0;
-let initialY = 0;
-
-
-/* =====================================
    OPEN IMAGE VIEWER
 ===================================== */
 
 function openImageViewer(imageSrc, imageAlt) {
 
-    /*
-        Close an existing viewer first.
-    */
+    /* Prevent multiple viewers */
 
-    if (currentViewer) {
-        closeImageViewer();
+    const oldViewer = document.querySelector(".image-viewer");
+
+    if (oldViewer) {
+        oldViewer.remove();
     }
 
 
-    /* Reset zoom */
-
-    zoomLevel = 1;
-
-    translateX = 0;
-    translateY = 0;
-
-    isDragging = false;
-
-
-    /* Prevent page scrolling */
-
-    document.body.classList.add("viewer-open");
-
-
-    /* Create overlay */
+    /* Create viewer */
 
     const viewer = document.createElement("div");
 
@@ -185,16 +119,7 @@ function openImageViewer(imageSrc, imageAlt) {
 
     viewer.innerHTML = `
 
-        <button
-            class="image-viewer-close"
-            type="button"
-            aria-label="Close image"
-        >
-            ×
-        </button>
-
-
-        <div class="image-viewer-toolbar">
+        <div class="zoom-controls">
 
             <button
                 type="button"
@@ -204,9 +129,9 @@ function openImageViewer(imageSrc, imageAlt) {
                 −
             </button>
 
-            <span class="zoom-level">
+            <div class="zoom-level">
                 100%
-            </span>
+            </div>
 
             <button
                 type="button"
@@ -221,30 +146,33 @@ function openImageViewer(imageSrc, imageAlt) {
                 class="zoom-reset"
                 aria-label="Reset zoom"
             >
-                Reset
+                ↺
             </button>
 
         </div>
 
 
+        <button
+            type="button"
+            class="image-viewer-close"
+            aria-label="Close image viewer"
+        >
+            ×
+        </button>
+
+
         <div class="image-viewer-content">
 
             <img
-                class="zoomable-image"
                 src="${imageSrc}"
                 alt="${escapeHTML(imageAlt)}"
                 draggable="false"
             >
 
-            <p class="image-viewer-caption">
+            <p>
                 ${escapeHTML(imageAlt)}
             </p>
 
-        </div>
-
-
-        <div class="image-viewer-help">
-            Scroll to zoom • Drag to move • ESC to close
         </div>
 
     `;
@@ -252,15 +180,132 @@ function openImageViewer(imageSrc, imageAlt) {
 
     document.body.appendChild(viewer);
 
-
-    currentViewer = viewer;
-
-    currentImage =
-        viewer.querySelector(".zoomable-image");
+    document.body.classList.add("viewer-open");
 
 
     /* =================================
-       ACTIVATE VIEWER
+       GET ELEMENTS
+    ================================= */
+
+    const image =
+        viewer.querySelector(
+            ".image-viewer-content img"
+        );
+
+    const closeButton =
+        viewer.querySelector(
+            ".image-viewer-close"
+        );
+
+    const zoomInButton =
+        viewer.querySelector(
+            ".zoom-in"
+        );
+
+    const zoomOutButton =
+        viewer.querySelector(
+            ".zoom-out"
+        );
+
+    const zoomResetButton =
+        viewer.querySelector(
+            ".zoom-reset"
+        );
+
+    const zoomLevel =
+        viewer.querySelector(
+            ".zoom-level"
+        );
+
+    const content =
+        viewer.querySelector(
+            ".image-viewer-content"
+        );
+
+
+    /* =================================
+       ZOOM VARIABLES
+    ================================= */
+
+    let scale = 1;
+
+    const minScale = 1;
+    const maxScale = 5;
+
+    let positionX = 0;
+    let positionY = 0;
+
+
+    /* =================================
+       APPLY IMAGE TRANSFORM
+    ================================= */
+
+    function updateImage() {
+
+        image.style.transform =
+            `translate(${positionX}px, ${positionY}px) scale(${scale})`;
+
+        zoomLevel.textContent =
+            `${Math.round(scale * 100)}%`;
+
+    }
+
+
+    /* =================================
+       RESET ZOOM
+    ================================= */
+
+    function resetZoom() {
+
+        scale = 1;
+
+        positionX = 0;
+        positionY = 0;
+
+        updateImage();
+
+    }
+
+
+    /* =================================
+       ZOOM FUNCTION
+    ================================= */
+
+    function changeZoom(amount) {
+
+        const oldScale = scale;
+
+        scale += amount;
+
+        scale =
+            Math.max(
+                minScale,
+                Math.min(maxScale, scale)
+            );
+
+
+        /* If returning to normal size,
+           center the image */
+
+        if (scale === 1) {
+
+            positionX = 0;
+            positionY = 0;
+
+        }
+
+
+        /* Prevent unused variable warning */
+
+        void oldScale;
+
+        updateImage();
+
+    }
+
+
+    /* =================================
+       OPEN ANIMATION
     ================================= */
 
     requestAnimationFrame(() => {
@@ -271,80 +316,121 @@ function openImageViewer(imageSrc, imageAlt) {
 
 
     /* =================================
-       CLOSE BUTTON
+       BUTTON EVENTS
     ================================= */
 
-    const closeButton =
-        viewer.querySelector(".image-viewer-close");
-
-    closeButton.addEventListener(
+    zoomInButton.addEventListener(
         "click",
-        closeImageViewer
+        () => changeZoom(0.5)
+    );
+
+
+    zoomOutButton.addEventListener(
+        "click",
+        () => changeZoom(-0.5)
+    );
+
+
+    zoomResetButton.addEventListener(
+        "click",
+        resetZoom
     );
 
 
     /* =================================
-       ZOOM BUTTONS
+       CLOSE VIEWER
     ================================= */
 
-    const zoomInButton =
-        viewer.querySelector(".zoom-in");
+    function closeViewer() {
 
-    const zoomOutButton =
-        viewer.querySelector(".zoom-out");
+        viewer.classList.remove("active");
 
-    const resetButton =
-        viewer.querySelector(".zoom-reset");
+        document.body.classList.remove("viewer-open");
 
+        setTimeout(() => {
 
-    zoomInButton.addEventListener("click", () => {
+            if (viewer.parentNode) {
+                viewer.remove();
+            }
 
-        changeZoom(0.25);
+        }, 250);
 
-    });
-
-
-    zoomOutButton.addEventListener("click", () => {
-
-        changeZoom(-0.25);
-
-    });
+    }
 
 
-    resetButton.addEventListener("click", () => {
-
-        resetZoom();
-
-    });
+    closeButton.addEventListener(
+        "click",
+        closeViewer
+    );
 
 
     /* =================================
-       CLICK BACKGROUND TO CLOSE
+       CLICK OUTSIDE IMAGE
     ================================= */
 
-    viewer.addEventListener("click", event => {
+    viewer.addEventListener(
+        "click",
+        event => {
 
-        if (
-            event.target === viewer ||
-            event.target.classList.contains(
-                "image-viewer-content"
-            )
-        ) {
+            if (
+                event.target === viewer ||
+                event.target === content
+            ) {
 
-            closeImageViewer();
+                closeViewer();
+
+            }
+
+        }
+    );
+
+
+    /* =================================
+       ESC KEY
+    ================================= */
+
+    function escapeKey(event) {
+
+        if (event.key === "Escape") {
+
+            closeViewer();
+
+            document.removeEventListener(
+                "keydown",
+                escapeKey
+            );
 
         }
 
-    });
+    }
+
+    document.addEventListener(
+        "keydown",
+        escapeKey
+    );
 
 
     /* =================================
        MOUSE WHEEL ZOOM
     ================================= */
 
-    currentImage.addEventListener(
+    viewer.addEventListener(
         "wheel",
-        handleImageWheel,
+        event => {
+
+            event.preventDefault();
+
+            if (event.deltaY < 0) {
+
+                changeZoom(0.25);
+
+            } else {
+
+                changeZoom(-0.25);
+
+            }
+
+        },
         {
             passive: false
         }
@@ -352,48 +438,180 @@ function openImageViewer(imageSrc, imageAlt) {
 
 
     /* =================================
-       MOUSE DRAG
+       DRAG IMAGE
     ================================= */
 
-    currentImage.addEventListener(
+    let dragging = false;
+
+    let startX = 0;
+    let startY = 0;
+
+    let startPositionX = 0;
+    let startPositionY = 0;
+
+
+    image.addEventListener(
         "mousedown",
-        startDragging
+        event => {
+
+            if (scale <= 1) {
+                return;
+            }
+
+            dragging = true;
+
+            image.classList.add("dragging");
+
+            startX = event.clientX;
+            startY = event.clientY;
+
+            startPositionX = positionX;
+            startPositionY = positionY;
+
+        }
     );
 
-    document.addEventListener(
+
+    window.addEventListener(
         "mousemove",
-        dragImage
+        event => {
+
+            if (!dragging) {
+                return;
+            }
+
+            positionX =
+                startPositionX +
+                (event.clientX - startX);
+
+            positionY =
+                startPositionY +
+                (event.clientY - startY);
+
+            updateImage();
+
+        }
     );
 
-    document.addEventListener(
+
+    window.addEventListener(
         "mouseup",
-        stopDragging
+        () => {
+
+            dragging = false;
+
+            image.classList.remove(
+                "dragging"
+            );
+
+        }
     );
 
 
     /* =================================
-       TOUCH SUPPORT
+       TOUCH / MOBILE ZOOM
     ================================= */
 
-    currentImage.addEventListener(
+    let touchStartDistance = null;
+
+    let touchStartScale = 1;
+
+
+    function getTouchDistance(touches) {
+
+        const first = touches[0];
+        const second = touches[1];
+
+        const x =
+            second.clientX -
+            first.clientX;
+
+        const y =
+            second.clientY -
+            first.clientY;
+
+        return Math.sqrt(
+            x * x + y * y
+        );
+
+    }
+
+
+    image.addEventListener(
         "touchstart",
-        startTouchDrag,
+        event => {
+
+            if (event.touches.length === 2) {
+
+                touchStartDistance =
+                    getTouchDistance(
+                        event.touches
+                    );
+
+                touchStartScale =
+                    scale;
+
+            }
+
+        },
         {
-            passive: false
+            passive: true
         }
     );
 
-    currentImage.addEventListener(
+
+    image.addEventListener(
         "touchmove",
-        moveTouchDrag,
+        event => {
+
+            if (
+                event.touches.length === 2 &&
+                touchStartDistance
+            ) {
+
+                event.preventDefault();
+
+                const currentDistance =
+                    getTouchDistance(
+                        event.touches
+                    );
+
+                const ratio =
+                    currentDistance /
+                    touchStartDistance;
+
+                scale =
+                    touchStartScale *
+                    ratio;
+
+                scale =
+                    Math.max(
+                        minScale,
+                        Math.min(maxScale, scale)
+                    );
+
+                updateImage();
+
+            }
+
+        },
         {
             passive: false
         }
     );
 
-    currentImage.addEventListener(
+
+    image.addEventListener(
         "touchend",
-        stopTouchDrag
+        event => {
+
+            if (event.touches.length < 2) {
+
+                touchStartDistance = null;
+
+            }
+
+        }
     );
 
 
@@ -401,13 +619,15 @@ function openImageViewer(imageSrc, imageAlt) {
        DOUBLE CLICK ZOOM
     ================================= */
 
-    currentImage.addEventListener(
+    image.addEventListener(
         "dblclick",
-        () => {
+        event => {
 
-            if (zoomLevel === 1) {
+            event.preventDefault();
 
-                zoomLevel = 2;
+            if (scale === 1) {
+
+                scale = 2.5;
 
             } else {
 
@@ -417,503 +637,17 @@ function openImageViewer(imageSrc, imageAlt) {
 
             }
 
-            updateImageTransform();
+            updateImage();
 
         }
     );
 
 
     /* =================================
-       KEYBOARD CONTROLS
+       INITIAL UPDATE
     ================================= */
 
-    document.addEventListener(
-        "keydown",
-        handleViewerKeyboard
-    );
-
-}
-
-
-/* =====================================
-   ZOOM IN / OUT
-===================================== */
-
-function changeZoom(amount) {
-
-    zoomLevel += amount;
-
-
-    /*
-        Minimum zoom
-    */
-
-    if (zoomLevel < 1) {
-        zoomLevel = 1;
-    }
-
-
-    /*
-        Maximum zoom
-    */
-
-    if (zoomLevel > 5) {
-        zoomLevel = 5;
-    }
-
-
-    /*
-        If returning to normal size,
-        reset image position.
-    */
-
-    if (zoomLevel === 1) {
-
-        translateX = 0;
-        translateY = 0;
-
-    }
-
-
-    updateImageTransform();
-
-}
-
-
-/* =====================================
-   RESET ZOOM
-===================================== */
-
-function resetZoom() {
-
-    zoomLevel = 1;
-
-    translateX = 0;
-    translateY = 0;
-
-    updateImageTransform();
-
-}
-
-
-/* =====================================
-   UPDATE IMAGE
-===================================== */
-
-function updateImageTransform() {
-
-    if (!currentImage) {
-        return;
-    }
-
-
-    currentImage.style.transform =
-        `translate(${translateX}px, ${translateY}px)
-         scale(${zoomLevel})`;
-
-
-    const percentage =
-        Math.round(zoomLevel * 100);
-
-
-    if (currentViewer) {
-
-        const zoomText =
-            currentViewer.querySelector(
-                ".zoom-level"
-            );
-
-        if (zoomText) {
-
-            zoomText.textContent =
-                `${percentage}%`;
-
-        }
-
-    }
-
-
-    if (zoomLevel > 1) {
-
-        currentImage.style.cursor =
-            "grab";
-
-    } else {
-
-        currentImage.style.cursor =
-            "zoom-in";
-
-    }
-
-}
-
-
-/* =====================================
-   MOUSE WHEEL ZOOM
-===================================== */
-
-function handleImageWheel(event) {
-
-    event.preventDefault();
-
-    if (event.deltaY < 0) {
-
-        changeZoom(0.15);
-
-    } else {
-
-        changeZoom(-0.15);
-
-    }
-
-}
-
-
-/* =====================================
-   START DRAGGING
-===================================== */
-
-function startDragging(event) {
-
-    if (zoomLevel <= 1) {
-        return;
-    }
-
-
-    event.preventDefault();
-
-
-    isDragging = true;
-
-
-    startX = event.clientX;
-    startY = event.clientY;
-
-
-    initialX = translateX;
-    initialY = translateY;
-
-
-    currentImage.style.cursor =
-        "grabbing";
-
-}
-
-
-/* =====================================
-   DRAG IMAGE
-===================================== */
-
-function dragImage(event) {
-
-    if (!isDragging) {
-        return;
-    }
-
-
-    event.preventDefault();
-
-
-    const movementX =
-        event.clientX - startX;
-
-    const movementY =
-        event.clientY - startY;
-
-
-    translateX =
-        initialX + movementX;
-
-    translateY =
-        initialY + movementY;
-
-
-    updateImageTransform();
-
-}
-
-
-/* =====================================
-   STOP DRAGGING
-===================================== */
-
-function stopDragging() {
-
-    if (!isDragging) {
-        return;
-    }
-
-
-    isDragging = false;
-
-
-    if (currentImage) {
-
-        currentImage.style.cursor =
-            zoomLevel > 1
-                ? "grab"
-                : "zoom-in";
-
-    }
-
-}
-
-
-/* =====================================
-   TOUCH DRAG
-===================================== */
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-let touchInitialX = 0;
-let touchInitialY = 0;
-
-
-function startTouchDrag(event) {
-
-    if (zoomLevel <= 1) {
-        return;
-    }
-
-
-    if (event.touches.length !== 1) {
-        return;
-    }
-
-
-    event.preventDefault();
-
-
-    const touch =
-        event.touches[0];
-
-
-    touchStartX =
-        touch.clientX;
-
-    touchStartY =
-        touch.clientY;
-
-
-    touchInitialX =
-        translateX;
-
-    touchInitialY =
-        translateY;
-
-}
-
-
-/* =====================================
-   MOVE TOUCH
-===================================== */
-
-function moveTouchDrag(event) {
-
-    if (zoomLevel <= 1) {
-        return;
-    }
-
-
-    if (event.touches.length !== 1) {
-        return;
-    }
-
-
-    event.preventDefault();
-
-
-    const touch =
-        event.touches[0];
-
-
-    const movementX =
-        touch.clientX - touchStartX;
-
-    const movementY =
-        touch.clientY - touchStartY;
-
-
-    translateX =
-        touchInitialX + movementX;
-
-    translateY =
-        touchInitialY + movementY;
-
-
-    updateImageTransform();
-
-}
-
-
-/* =====================================
-   STOP TOUCH DRAG
-===================================== */
-
-function stopTouchDrag() {
-
-    // Nothing needed here.
-}
-
-
-/* =====================================
-   KEYBOARD CONTROLS
-===================================== */
-
-function handleViewerKeyboard(event) {
-
-    if (!currentViewer) {
-        return;
-    }
-
-
-    /* ESC = close */
-
-    if (event.key === "Escape") {
-
-        closeImageViewer();
-
-        return;
-
-    }
-
-
-    /* + = zoom in */
-
-    if (
-        event.key === "+" ||
-        event.key === "="
-    ) {
-
-        changeZoom(0.25);
-
-        return;
-
-    }
-
-
-    /* - = zoom out */
-
-    if (event.key === "-") {
-
-        changeZoom(-0.25);
-
-        return;
-
-    }
-
-
-    /* 0 = reset */
-
-    if (event.key === "0") {
-
-        resetZoom();
-
-        return;
-
-    }
-
-
-    /* Arrow keys move zoomed image */
-
-    if (zoomLevel > 1) {
-
-        if (event.key === "ArrowLeft") {
-
-            translateX -= 30;
-
-            updateImageTransform();
-
-        }
-
-        if (event.key === "ArrowRight") {
-
-            translateX += 30;
-
-            updateImageTransform();
-
-        }
-
-        if (event.key === "ArrowUp") {
-
-            translateY -= 30;
-
-            updateImageTransform();
-
-        }
-
-        if (event.key === "ArrowDown") {
-
-            translateY += 30;
-
-            updateImageTransform();
-
-        }
-
-    }
-
-}
-
-
-/* =====================================
-   CLOSE IMAGE VIEWER
-===================================== */
-
-function closeImageViewer() {
-
-    if (!currentViewer) {
-        return;
-    }
-
-
-    const viewer =
-        currentViewer;
-
-
-    viewer.classList.remove("active");
-
-
-    document.body.classList.remove(
-        "viewer-open"
-    );
-
-
-    document.removeEventListener(
-        "mousemove",
-        dragImage
-    );
-
-    document.removeEventListener(
-        "mouseup",
-        stopDragging
-    );
-
-    document.removeEventListener(
-        "keydown",
-        handleViewerKeyboard
-    );
-
-
-    setTimeout(() => {
-
-        if (viewer) {
-            viewer.remove();
-        }
-
-    }, 300);
-
-
-    currentViewer = null;
-    currentImage = null;
-
-
-    zoomLevel = 1;
-
-    translateX = 0;
-    translateY = 0;
-
-    isDragging = false;
+    updateImage();
 
 }
 
