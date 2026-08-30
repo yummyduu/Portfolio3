@@ -1,12 +1,13 @@
 /* =====================================
-   TRISTAN TEOXON
-   PORTFOLIO STYLES
+   TRISTAN TEOXON PORTFOLIO
+   DARK DEVELOPER THEME
 ===================================== */
 
 :root {
     --black: #070a0d;
     --dark: #0b1015;
     --card: #10161d;
+    --card-light: #141c24;
 
     --green: #00e887;
     --green-soft: #35f1a4;
@@ -49,8 +50,8 @@ body {
 }
 
 a {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
 }
 
 img {
@@ -71,11 +72,14 @@ img {
     position: fixed;
     top: 0;
     left: 0;
+
     width: 100%;
     height: 70px;
+
     z-index: 999;
 
-    background: rgba(7, 10, 13, .85);
+    background: rgba(7, 10, 13, .88);
+
     backdrop-filter: blur(15px);
 
     border-bottom: 1px solid rgba(255,255,255,.05);
@@ -84,18 +88,19 @@ img {
 .nav-container {
     max-width: 1150px;
     height: 100%;
+
     margin: auto;
     padding: 0 25px;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .logo {
     font-family: var(--code);
-    font-weight: 600;
     font-size: 20px;
+    font-weight: 600;
 }
 
 .logo span {
@@ -109,8 +114,10 @@ img {
 
 .nav-links a {
     color: var(--gray);
+
     font-family: var(--code);
     font-size: 13px;
+
     transition: .3s;
 }
 
@@ -120,8 +127,11 @@ img {
 
 .menu-btn {
     display: none;
-    font-size: 25px;
+
     color: var(--green);
+
+    font-size: 25px;
+
     cursor: pointer;
 }
 
@@ -133,10 +143,10 @@ img {
 .hero {
     min-height: 100vh;
 
+    position: relative;
+
     display: flex;
     align-items: center;
-
-    position: relative;
 
     padding: 110px 25px 70px;
 }
@@ -144,9 +154,11 @@ img {
 .hero-content {
     width: 100%;
     max-width: 1150px;
+
     margin: auto;
 
     display: grid;
+
     grid-template-columns: 1.4fr .6fr;
 
     gap: 80px;
@@ -154,16 +166,13 @@ img {
     align-items: center;
 }
 
-
-/* =====================================
-   HERO TEXT
-===================================== */
-
 .terminal {
+    margin-bottom: 25px;
+
+    color: var(--gray);
+
     font-family: var(--code);
     font-size: 13px;
-    color: var(--gray);
-    margin-bottom: 25px;
 }
 
 .terminal-green {
@@ -179,21 +188,25 @@ img {
 }
 
 .hello {
-    color: var(--gray);
-    font-size: 15px;
     margin-bottom: 5px;
+
+    color: var(--gray);
+
+    font-size: 15px;
 }
 
 .hero h1 {
+    margin-bottom: 20px;
+
     font-family: var(--code);
-    text-transform: uppercase;
 
     font-size: clamp(40px, 6vw, 70px);
 
     line-height: 1.05;
+
     letter-spacing: -3px;
 
-    margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 .hero h1 span {
@@ -201,13 +214,12 @@ img {
 }
 
 .role {
+    margin-bottom: 18px;
+
     color: var(--blue);
 
     font-family: var(--code);
-
     font-size: 15px;
-
-    margin-bottom: 18px;
 }
 
 .intro {
@@ -268,16 +280,17 @@ img {
 
     padding: 10px 20px;
 
+    border-radius: 4px;
+
     font-family: var(--code);
     font-size: 12px;
-
-    border-radius: 4px;
 
     transition: .3s ease;
 }
 
 .main-btn {
     background: var(--green);
+
     color: #000;
 }
 
@@ -288,20 +301,20 @@ img {
 }
 
 .outline-btn {
-    border: 1px solid var(--border);
-
     color: var(--white);
+
+    border: 1px solid var(--border);
 }
 
 .outline-btn:hover {
-    border-color: var(--green);
-
     color: var(--green);
+
+    border-color: var(--green);
 }
 
 
 /* =====================================
-   PHOTO
+   HERO PHOTO
 ===================================== */
 
 .hero-photo {
@@ -335,7 +348,6 @@ img {
     height: 23px;
 
     display: flex;
-
     align-items: center;
 
     gap: 6px;
@@ -383,7 +395,7 @@ img {
 
     filter: saturate(.85);
 
-    transition: .6s ease;
+    transition: .6s;
 }
 
 .photo-frame:hover img {
@@ -397,11 +409,10 @@ img {
 
     padding: 9px 5px 4px;
 
-    font-family: var(--code);
-
-    font-size: 10px;
-
     color: var(--gray-dark);
+
+    font-family: var(--code);
+    font-size: 10px;
 }
 
 .green-text {
@@ -422,9 +433,7 @@ img {
     transform: translateX(-50%);
 
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
 
     gap: 5px;
@@ -432,13 +441,11 @@ img {
     color: var(--gray-dark);
 
     font-family: var(--code);
-
     font-size: 9px;
 }
 
 .scroll-line {
     width: 1px;
-
     height: 30px;
 
     background: linear-gradient(
@@ -478,7 +485,6 @@ img {
 
 .section-heading {
     display: flex;
-
     align-items: center;
 
     gap: 13px;
@@ -487,25 +493,22 @@ img {
 }
 
 .section-heading span {
-    font-family: var(--code);
-
-    font-size: 13px;
-
     color: var(--green);
+
+    font-family: var(--code);
+    font-size: 13px;
 }
 
 .section-heading h2 {
     font-family: var(--code);
-
     font-size: 28px;
 }
 
 .section-subtitle {
-    color: var(--gray);
-
     margin-top: -25px;
-
     margin-bottom: 35px;
+
+    color: var(--gray);
 
     font-size: 14px;
 }
@@ -548,7 +551,7 @@ img {
 }
 
 .quote {
-    border-left: 2px solid var(--green);
+    margin-top: 25px;
 
     padding: 12px 18px;
 
@@ -558,31 +561,30 @@ img {
 
     background: rgba(0,232,135,.025);
 
-    margin-top: 25px;
+    border-left: 2px solid var(--green);
 }
 
 .code-window {
+    overflow: hidden;
+
     background: #050709;
 
     border: 1px solid var(--border);
 
     border-radius: 7px;
-
-    overflow: hidden;
 }
 
 .window-bar {
     height: 35px;
 
-    border-bottom: 1px solid var(--border);
-
     display: flex;
+    align-items: center;
 
     gap: 6px;
 
-    align-items: center;
-
     padding-left: 13px;
+
+    border-bottom: 1px solid var(--border);
 }
 
 .window-bar span {
@@ -650,21 +652,21 @@ img {
 }
 
 .skill-number {
+    margin-bottom: 18px;
+
     color: var(--green);
 
     font-family: var(--code);
 
     font-size: 11px;
-
-    margin-bottom: 18px;
 }
 
 .skill h3 {
+    margin-bottom: 8px;
+
     font-family: var(--code);
 
     font-size: 16px;
-
-    margin-bottom: 8px;
 }
 
 .skill p {
@@ -679,12 +681,11 @@ img {
 ===================================== */
 
 .academic-category {
-    margin-bottom: 60px;
+    margin-bottom: 70px;
 }
 
 .category-heading {
     display: flex;
-
     align-items: center;
 
     gap: 12px;
@@ -701,40 +702,38 @@ img {
 }
 
 .category-heading h3 {
+    color: var(--white);
+
     font-family: var(--code);
 
     font-size: 20px;
-
-    color: var(--white);
 }
 
 .category-description {
+    margin-bottom: 25px;
+
     color: var(--gray);
 
     font-size: 13px;
-
-    margin-bottom: 20px;
 }
 
 .academic-category:not(:last-child) {
-    padding-bottom: 45px;
+    padding-bottom: 55px;
 
     border-bottom: 1px solid var(--border);
 }
 
 
 /* =====================================
-   ACADEMIC IMAGE GRID
+   ACADEMIC GRID
 ===================================== */
 
-.quiz-grid {
+.academic-grid {
     display: grid;
 
     grid-template-columns: repeat(3, 1fr);
 
     gap: 18px;
-
-    margin-top: 20px;
 }
 
 
@@ -743,20 +742,18 @@ img {
 ===================================== */
 
 .academic-card {
+    overflow: hidden;
+
     background: var(--card);
 
     border: 1px solid var(--border);
 
     border-radius: 6px;
 
-    overflow: hidden;
-
     transition:
         transform .4s ease,
         border-color .4s ease,
         box-shadow .4s ease;
-
-    cursor: pointer;
 }
 
 .academic-card:hover {
@@ -765,50 +762,111 @@ img {
     border-color: rgba(0,232,135,.45);
 
     box-shadow:
-        0 15px 35px rgba(0,0,0,.35),
+        0 15px 40px rgba(0,0,0,.35),
         0 0 20px rgba(0,232,135,.04);
 }
 
 
 /* =====================================
-   ACADEMIC CARD IMAGE
+   ACADEMIC IMAGE
 ===================================== */
 
-.academic-card img {
-    width: 100%;
+.academic-image {
+    position: relative;
 
-    height: 250px;
+    height: 270px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a1015,
+            #050709
+        );
+}
+
+.academic-image::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.05),
+            rgba(0,0,0,.35)
+        );
+}
+
+.academic-image img {
+    width: 100%;
+    height: 100%;
 
     display: block;
 
     object-fit: cover;
 
-    object-position: center;
-
-    background: #050709;
-
     transition:
-        transform .5s ease,
-        filter .5s ease;
+        transform .6s ease,
+        filter .6s ease;
 }
 
-.academic-card:hover img {
-    transform: scale(1.03);
+.academic-card:hover .academic-image img {
+    transform: scale(1.04);
 
     filter: brightness(1.08);
 }
 
 
 /* =====================================
-   ACADEMIC CARD CONTENT
+   IMAGE LABEL
 ===================================== */
 
-.academic-card-content {
+.image-number {
+    position: absolute;
+
+    z-index: 2;
+
+    left: 12px;
+    bottom: 12px;
+
+    padding: 5px 9px;
+
+    color: var(--green);
+
+    background: rgba(5,7,9,.88);
+
+    border: 1px solid rgba(0,232,135,.25);
+
+    border-radius: 3px;
+
+    font-family: var(--code);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================
+   ACADEMIC INFO
+===================================== */
+
+.academic-info {
     padding: 17px 18px 20px;
 }
 
-.academic-card-content > span {
+.academic-info > span {
     display: block;
+
+    margin-bottom: 6px;
 
     color: var(--green);
 
@@ -816,135 +874,25 @@ img {
 
     font-size: 9px;
 
-    letter-spacing: 1px;
-
-    margin-bottom: 6px;
-
     text-transform: uppercase;
+
+    letter-spacing: 1px;
 }
 
-.academic-card-content h3 {
-    font-family: var(--code);
+.academic-info h3 {
+    margin-bottom: 5px;
 
     color: var(--white);
 
-    font-size: 14px;
-
-    margin-bottom: 5px;
-}
-
-.academic-card-content p {
-    color: var(--gray);
-
-    font-size: 11px;
-}
-
-
-/* =====================================
-   EMPTY STATE
-===================================== */
-
-.empty {
-    grid-column: 1 / -1;
-
-    text-align: center;
-
-    padding: 45px;
-
-    border: 1px solid var(--border);
-
-    color: var(--gray);
-}
-
-.empty span {
-    color: var(--green);
-
-    font-size: 28px;
-}
-
-
-/* =====================================
-   OPTIONAL OLD FILE CARD
-===================================== */
-
-.quiz-card {
-    padding: 20px;
-
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 5px;
-
-    transition: .4s;
-}
-
-.quiz-card:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(0,232,135,.35);
-}
-
-.quiz-file-icon {
-    font-size: 25px;
-
-    margin-bottom: 12px;
-}
-
-.quiz-card h3 {
     font-family: var(--code);
 
     font-size: 13px;
-
-    word-break: break-word;
 }
 
-.quiz-card p {
+.academic-info p {
     color: var(--gray);
 
     font-size: 11px;
-
-    margin-bottom: 15px;
-}
-
-.quiz-actions {
-    display: flex;
-
-    gap: 7px;
-}
-
-.quiz-actions button {
-    flex: 1;
-
-    padding: 7px;
-
-    background: transparent;
-
-    border: 1px solid var(--border);
-
-    color: var(--gray);
-
-    cursor: pointer;
-
-    font-family: var(--code);
-
-    font-size: 10px;
-
-    border-radius: 3px;
-
-    transition: .3s;
-}
-
-.quiz-actions button:hover {
-    border-color: var(--green);
-
-    color: var(--green);
-}
-
-.quiz-actions .delete-btn:hover {
-    border-color: #ff5f56;
-
-    color: #ff5f56;
 }
 
 
@@ -963,9 +911,9 @@ img {
 .project {
     padding: 28px;
 
-    border: 1px solid var(--border);
-
     background: var(--card);
+
+    border: 1px solid var(--border);
 
     transition: .4s;
 }
@@ -977,29 +925,29 @@ img {
 }
 
 .project-number {
+    margin-bottom: 30px;
+
     color: var(--green);
 
     font-family: var(--code);
 
     font-size: 11px;
-
-    margin-bottom: 30px;
 }
 
 .project h3 {
+    margin-bottom: 12px;
+
     font-family: var(--code);
 
     font-size: 15px;
-
-    margin-bottom: 12px;
 }
 
 .project p {
+    margin-bottom: 20px;
+
     color: var(--gray);
 
     font-size: 13px;
-
-    margin-bottom: 20px;
 }
 
 .project-tech {
@@ -1011,9 +959,9 @@ img {
 }
 
 .project-tech span {
-    color: var(--green);
-
     margin: 0 5px;
+
+    color: var(--green);
 }
 
 
@@ -1022,25 +970,25 @@ img {
 ===================================== */
 
 .contact {
-    text-align: center;
-
     max-width: 700px;
+
+    text-align: center;
 }
 
 .contact-content h2 {
+    margin: 15px 0;
+
     font-family: var(--code);
 
     font-size: 40px;
-
-    margin: 15px 0;
 }
 
 .contact-content p {
+    margin-bottom: 25px;
+
     color: var(--gray);
 
     font-size: 14px;
-
-    margin-bottom: 25px;
 }
 
 
@@ -1049,17 +997,17 @@ img {
 ===================================== */
 
 footer {
-    border-top: 1px solid var(--border);
-
-    text-align: center;
-
     padding: 30px;
 
     color: var(--gray-dark);
 
+    border-top: 1px solid var(--border);
+
     font-family: var(--code);
 
     font-size: 11px;
+
+    text-align: center;
 }
 
 footer span {
@@ -1074,7 +1022,7 @@ footer small {
 
 
 /* =====================================
-   SMOOTH REVEAL ANIMATION
+   REVEAL ANIMATION
 ===================================== */
 
 .reveal {
@@ -1117,7 +1065,7 @@ footer small {
 
 
 /* =====================================
-   RESPONSIVE
+   TABLET
 ===================================== */
 
 @media(max-width: 900px) {
@@ -1161,13 +1109,13 @@ footer small {
     }
 
     .skills-grid,
-    .quiz-grid,
+    .academic-grid,
     .projects-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .academic-card img {
-        height: 230px;
+    .academic-image {
+        height: 250px;
     }
 }
 
@@ -1190,9 +1138,9 @@ footer small {
 
         flex-direction: column;
 
-        background: var(--black);
-
         padding: 25px;
+
+        background: var(--black);
 
         border-bottom: 1px solid var(--border);
     }
@@ -1224,7 +1172,7 @@ footer small {
     }
 
     .skills-grid,
-    .quiz-grid,
+    .academic-grid,
     .projects-grid {
         grid-template-columns: 1fr;
     }
@@ -1238,7 +1186,7 @@ footer small {
     }
 
     .academic-category {
-        margin-bottom: 45px;
+        margin-bottom: 50px;
     }
 
     .category-heading h3 {
@@ -1249,27 +1197,14 @@ footer small {
         font-size: 12px;
     }
 
-    .academic-category:not(:last-child) {
-        padding-bottom: 35px;
-    }
-
-    /* Academic images on phone */
-    .academic-card img {
-        height: 260px;
-    }
-
-    .academic-card-content {
-        padding: 15px;
-    }
-
-    .academic-card-content h3 {
-        font-size: 13px;
+    .academic-image {
+        height: 280px;
     }
 }
 
 
 /* =====================================
-   VERY SMALL PHONES
+   SMALL PHONES
 ===================================== */
 
 @media(max-width: 400px) {
@@ -1286,7 +1221,7 @@ footer small {
         height: 225px;
     }
 
-    .academic-card img {
-        height: 230px;
+    .academic-image {
+        height: 240px;
     }
 }
