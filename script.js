@@ -1,7 +1,7 @@
 /* =====================================
    TRISTAN TEOXON PORTFOLIO
    JAVASCRIPT
-   DARK DEVELOPER THEME
+   ACADEMIC IMAGE ZOOM + MOBILE MENU
 ===================================== */
 
 
@@ -18,16 +18,13 @@ if (menuButton && navLinks) {
         navLinks.classList.toggle("active");
     });
 
-    document
-        .querySelectorAll(".nav-links a")
-        .forEach(link => {
+    document.querySelectorAll(".nav-links a").forEach(link => {
 
-            link.addEventListener("click", () => {
-                navLinks.classList.remove("active");
-            });
-
+        link.addEventListener("click", () => {
+            navLinks.classList.remove("active");
         });
 
+    });
 }
 
 
@@ -42,7 +39,6 @@ const revealElements = document.querySelectorAll(
 if ("IntersectionObserver" in window) {
 
     const observer = new IntersectionObserver(
-
         (entries) => {
 
             entries.forEach(entry => {
@@ -58,11 +54,9 @@ if ("IntersectionObserver" in window) {
             });
 
         },
-
         {
             threshold: 0.12
         }
-
     );
 
     revealElements.forEach(element => {
@@ -79,54 +73,52 @@ if ("IntersectionObserver" in window) {
 
 
 /* =====================================
-   ACADEMIC IMAGE ZOOM
+   ACADEMIC WORK IMAGE ZOOM
 ===================================== */
+
+/*
+    This selects ALL images inside:
+
+    .academic-card
+
+    So it automatically works for:
+
+    - Laboratories
+    - Quizzes
+    - Midterms
+    - Finals
+    - Future academic work
+*/
 
 const academicImages = document.querySelectorAll(
     ".academic-card .academic-image img"
 );
 
+
+/* =====================================
+   MAKE ACADEMIC PHOTOS CLICKABLE
+===================================== */
+
 academicImages.forEach(image => {
 
+    // Make it obvious that the image is clickable
     image.style.cursor = "zoom-in";
 
-    image.setAttribute("tabindex", "0");
-
     image.setAttribute(
-        "aria-label",
-        `Open ${image.alt || "academic image"} in full screen`
+        "title",
+        "Click to view and zoom"
     );
 
 
-    /* CLICK IMAGE */
+    image.addEventListener("click", function (event) {
 
-    image.addEventListener("click", () => {
+        event.preventDefault();
+        event.stopPropagation();
 
         openImageViewer(
-            image.src,
-            image.alt
+            this.src,
+            this.alt
         );
-
-    });
-
-
-    /* KEYBOARD SUPPORT */
-
-    image.addEventListener("keydown", event => {
-
-        if (
-            event.key === "Enter" ||
-            event.key === " "
-        ) {
-
-            event.preventDefault();
-
-            openImageViewer(
-                image.src,
-                image.alt
-            );
-
-        }
 
     });
 
@@ -134,169 +126,732 @@ academicImages.forEach(image => {
 
 
 /* =====================================
-   IMAGE VIEWER
+   IMAGE VIEWER VARIABLES
+===================================== */
+
+let currentViewer = null;
+let currentImage = null;
+
+let zoomLevel = 1;
+
+let translateX = 0;
+let translateY = 0;
+
+let isDragging = false;
+
+let startX = 0;
+let startY = 0;
+
+let initialX = 0;
+let initialY = 0;
+
+
+/* =====================================
+   OPEN IMAGE VIEWER
 ===================================== */
 
 function openImageViewer(imageSrc, imageAlt) {
 
-    /* Prevent multiple viewers */
+    /*
+        Close an existing viewer first.
+    */
 
-    const existingViewer =
-        document.querySelector(".image-viewer");
-
-    if (existingViewer) {
-        existingViewer.remove();
+    if (currentViewer) {
+        closeImageViewer();
     }
+
+
+    /* Reset zoom */
+
+    zoomLevel = 1;
+
+    translateX = 0;
+    translateY = 0;
+
+    isDragging = false;
+
+
+    /* Prevent page scrolling */
+
+    document.body.classList.add("viewer-open");
 
 
     /* Create overlay */
 
-    const overlay =
-        document.createElement("div");
+    const viewer = document.createElement("div");
 
-    overlay.className = "image-viewer";
-
-    overlay.setAttribute(
-        "role",
-        "dialog"
-    );
-
-    overlay.setAttribute(
-        "aria-modal",
-        "true"
-    );
-
-    overlay.setAttribute(
-        "aria-label",
-        imageAlt || "Academic work preview"
-    );
+    viewer.className = "image-viewer";
 
 
-    overlay.innerHTML = `
+    viewer.innerHTML = `
 
-        <div class="image-viewer-backdrop"></div>
+        <button
+            class="image-viewer-close"
+            type="button"
+            aria-label="Close image"
+        >
+            ×
+        </button>
+
+
+        <div class="image-viewer-toolbar">
+
+            <button
+                type="button"
+                class="zoom-out"
+                aria-label="Zoom out"
+            >
+                −
+            </button>
+
+            <span class="zoom-level">
+                100%
+            </span>
+
+            <button
+                type="button"
+                class="zoom-in"
+                aria-label="Zoom in"
+            >
+                +
+            </button>
+
+            <button
+                type="button"
+                class="zoom-reset"
+                aria-label="Reset zoom"
+            >
+                Reset
+            </button>
+
+        </div>
+
 
         <div class="image-viewer-content">
 
-            <button
-                class="image-viewer-close"
-                type="button"
-                aria-label="Close image"
-            >
-                ×
-            </button>
-
             <img
-                class="image-viewer-image"
-                src="${escapeHTML(imageSrc)}"
+                class="zoomable-image"
+                src="${imageSrc}"
                 alt="${escapeHTML(imageAlt)}"
+                draggable="false"
             >
 
-            ${
-                imageAlt
-                    ? `<p class="image-viewer-caption">
-                        ${escapeHTML(imageAlt)}
-                       </p>`
-                    : ""
-            }
+            <p class="image-viewer-caption">
+                ${escapeHTML(imageAlt)}
+            </p>
 
+        </div>
+
+
+        <div class="image-viewer-help">
+            Scroll to zoom • Drag to move • ESC to close
         </div>
 
     `;
 
 
-    /* Add viewer to BODY */
-
-    document.body.appendChild(overlay);
+    document.body.appendChild(viewer);
 
 
-    /* Prevent background scrolling */
+    currentViewer = viewer;
 
-    document.body.classList.add(
-        "image-viewer-open"
-    );
+    currentImage =
+        viewer.querySelector(".zoomable-image");
 
 
-    /* Animate viewer */
+    /* =================================
+       ACTIVATE VIEWER
+    ================================= */
 
     requestAnimationFrame(() => {
 
-        overlay.classList.add("active");
+        viewer.classList.add("active");
 
     });
 
 
-    /* Close button */
+    /* =================================
+       CLOSE BUTTON
+    ================================= */
 
     const closeButton =
-        overlay.querySelector(
-            ".image-viewer-close"
-        );
+        viewer.querySelector(".image-viewer-close");
 
     closeButton.addEventListener(
         "click",
-        () => closeImageViewer(overlay)
+        closeImageViewer
     );
 
 
-    /* Close when clicking dark background */
+    /* =================================
+       ZOOM BUTTONS
+    ================================= */
 
-    const backdrop =
-        overlay.querySelector(
-            ".image-viewer-backdrop"
-        );
+    const zoomInButton =
+        viewer.querySelector(".zoom-in");
 
-    backdrop.addEventListener(
-        "click",
-        () => closeImageViewer(overlay)
-    );
+    const zoomOutButton =
+        viewer.querySelector(".zoom-out");
+
+    const resetButton =
+        viewer.querySelector(".zoom-reset");
 
 
-    /* Prevent clicking the image from closing */
+    zoomInButton.addEventListener("click", () => {
 
-    const image =
-        overlay.querySelector(
-            ".image-viewer-image"
-        );
+        changeZoom(0.25);
 
-    image.addEventListener(
-        "click",
-        event => {
+    });
 
-            event.stopPropagation();
 
+    zoomOutButton.addEventListener("click", () => {
+
+        changeZoom(-0.25);
+
+    });
+
+
+    resetButton.addEventListener("click", () => {
+
+        resetZoom();
+
+    });
+
+
+    /* =================================
+       CLICK BACKGROUND TO CLOSE
+    ================================= */
+
+    viewer.addEventListener("click", event => {
+
+        if (
+            event.target === viewer ||
+            event.target.classList.contains(
+                "image-viewer-content"
+            )
+        ) {
+
+            closeImageViewer();
+
+        }
+
+    });
+
+
+    /* =================================
+       MOUSE WHEEL ZOOM
+    ================================= */
+
+    currentImage.addEventListener(
+        "wheel",
+        handleImageWheel,
+        {
+            passive: false
         }
     );
 
 
-    /* ESC key */
+    /* =================================
+       MOUSE DRAG
+    ================================= */
+
+    currentImage.addEventListener(
+        "mousedown",
+        startDragging
+    );
 
     document.addEventListener(
-        "keydown",
-        function escapeKey(event) {
+        "mousemove",
+        dragImage
+    );
 
-            if (event.key === "Escape") {
+    document.addEventListener(
+        "mouseup",
+        stopDragging
+    );
 
-                closeImageViewer(overlay);
 
-                document.removeEventListener(
-                    "keydown",
-                    escapeKey
-                );
+    /* =================================
+       TOUCH SUPPORT
+    ================================= */
+
+    currentImage.addEventListener(
+        "touchstart",
+        startTouchDrag,
+        {
+            passive: false
+        }
+    );
+
+    currentImage.addEventListener(
+        "touchmove",
+        moveTouchDrag,
+        {
+            passive: false
+        }
+    );
+
+    currentImage.addEventListener(
+        "touchend",
+        stopTouchDrag
+    );
+
+
+    /* =================================
+       DOUBLE CLICK ZOOM
+    ================================= */
+
+    currentImage.addEventListener(
+        "dblclick",
+        () => {
+
+            if (zoomLevel === 1) {
+
+                zoomLevel = 2;
+
+            } else {
+
+                resetZoom();
+
+                return;
 
             }
 
+            updateImageTransform();
+
         }
     );
 
 
-    /* Focus close button */
+    /* =================================
+       KEYBOARD CONTROLS
+    ================================= */
 
-    setTimeout(() => {
+    document.addEventListener(
+        "keydown",
+        handleViewerKeyboard
+    );
 
-        closeButton.focus();
+}
 
-    }, 100);
+
+/* =====================================
+   ZOOM IN / OUT
+===================================== */
+
+function changeZoom(amount) {
+
+    zoomLevel += amount;
+
+
+    /*
+        Minimum zoom
+    */
+
+    if (zoomLevel < 1) {
+        zoomLevel = 1;
+    }
+
+
+    /*
+        Maximum zoom
+    */
+
+    if (zoomLevel > 5) {
+        zoomLevel = 5;
+    }
+
+
+    /*
+        If returning to normal size,
+        reset image position.
+    */
+
+    if (zoomLevel === 1) {
+
+        translateX = 0;
+        translateY = 0;
+
+    }
+
+
+    updateImageTransform();
+
+}
+
+
+/* =====================================
+   RESET ZOOM
+===================================== */
+
+function resetZoom() {
+
+    zoomLevel = 1;
+
+    translateX = 0;
+    translateY = 0;
+
+    updateImageTransform();
+
+}
+
+
+/* =====================================
+   UPDATE IMAGE
+===================================== */
+
+function updateImageTransform() {
+
+    if (!currentImage) {
+        return;
+    }
+
+
+    currentImage.style.transform =
+        `translate(${translateX}px, ${translateY}px)
+         scale(${zoomLevel})`;
+
+
+    const percentage =
+        Math.round(zoomLevel * 100);
+
+
+    if (currentViewer) {
+
+        const zoomText =
+            currentViewer.querySelector(
+                ".zoom-level"
+            );
+
+        if (zoomText) {
+
+            zoomText.textContent =
+                `${percentage}%`;
+
+        }
+
+    }
+
+
+    if (zoomLevel > 1) {
+
+        currentImage.style.cursor =
+            "grab";
+
+    } else {
+
+        currentImage.style.cursor =
+            "zoom-in";
+
+    }
+
+}
+
+
+/* =====================================
+   MOUSE WHEEL ZOOM
+===================================== */
+
+function handleImageWheel(event) {
+
+    event.preventDefault();
+
+    if (event.deltaY < 0) {
+
+        changeZoom(0.15);
+
+    } else {
+
+        changeZoom(-0.15);
+
+    }
+
+}
+
+
+/* =====================================
+   START DRAGGING
+===================================== */
+
+function startDragging(event) {
+
+    if (zoomLevel <= 1) {
+        return;
+    }
+
+
+    event.preventDefault();
+
+
+    isDragging = true;
+
+
+    startX = event.clientX;
+    startY = event.clientY;
+
+
+    initialX = translateX;
+    initialY = translateY;
+
+
+    currentImage.style.cursor =
+        "grabbing";
+
+}
+
+
+/* =====================================
+   DRAG IMAGE
+===================================== */
+
+function dragImage(event) {
+
+    if (!isDragging) {
+        return;
+    }
+
+
+    event.preventDefault();
+
+
+    const movementX =
+        event.clientX - startX;
+
+    const movementY =
+        event.clientY - startY;
+
+
+    translateX =
+        initialX + movementX;
+
+    translateY =
+        initialY + movementY;
+
+
+    updateImageTransform();
+
+}
+
+
+/* =====================================
+   STOP DRAGGING
+===================================== */
+
+function stopDragging() {
+
+    if (!isDragging) {
+        return;
+    }
+
+
+    isDragging = false;
+
+
+    if (currentImage) {
+
+        currentImage.style.cursor =
+            zoomLevel > 1
+                ? "grab"
+                : "zoom-in";
+
+    }
+
+}
+
+
+/* =====================================
+   TOUCH DRAG
+===================================== */
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+let touchInitialX = 0;
+let touchInitialY = 0;
+
+
+function startTouchDrag(event) {
+
+    if (zoomLevel <= 1) {
+        return;
+    }
+
+
+    if (event.touches.length !== 1) {
+        return;
+    }
+
+
+    event.preventDefault();
+
+
+    const touch =
+        event.touches[0];
+
+
+    touchStartX =
+        touch.clientX;
+
+    touchStartY =
+        touch.clientY;
+
+
+    touchInitialX =
+        translateX;
+
+    touchInitialY =
+        translateY;
+
+}
+
+
+/* =====================================
+   MOVE TOUCH
+===================================== */
+
+function moveTouchDrag(event) {
+
+    if (zoomLevel <= 1) {
+        return;
+    }
+
+
+    if (event.touches.length !== 1) {
+        return;
+    }
+
+
+    event.preventDefault();
+
+
+    const touch =
+        event.touches[0];
+
+
+    const movementX =
+        touch.clientX - touchStartX;
+
+    const movementY =
+        touch.clientY - touchStartY;
+
+
+    translateX =
+        touchInitialX + movementX;
+
+    translateY =
+        touchInitialY + movementY;
+
+
+    updateImageTransform();
+
+}
+
+
+/* =====================================
+   STOP TOUCH DRAG
+===================================== */
+
+function stopTouchDrag() {
+
+    // Nothing needed here.
+}
+
+
+/* =====================================
+   KEYBOARD CONTROLS
+===================================== */
+
+function handleViewerKeyboard(event) {
+
+    if (!currentViewer) {
+        return;
+    }
+
+
+    /* ESC = close */
+
+    if (event.key === "Escape") {
+
+        closeImageViewer();
+
+        return;
+
+    }
+
+
+    /* + = zoom in */
+
+    if (
+        event.key === "+" ||
+        event.key === "="
+    ) {
+
+        changeZoom(0.25);
+
+        return;
+
+    }
+
+
+    /* - = zoom out */
+
+    if (event.key === "-") {
+
+        changeZoom(-0.25);
+
+        return;
+
+    }
+
+
+    /* 0 = reset */
+
+    if (event.key === "0") {
+
+        resetZoom();
+
+        return;
+
+    }
+
+
+    /* Arrow keys move zoomed image */
+
+    if (zoomLevel > 1) {
+
+        if (event.key === "ArrowLeft") {
+
+            translateX -= 30;
+
+            updateImageTransform();
+
+        }
+
+        if (event.key === "ArrowRight") {
+
+            translateX += 30;
+
+            updateImageTransform();
+
+        }
+
+        if (event.key === "ArrowUp") {
+
+            translateY -= 30;
+
+            updateImageTransform();
+
+        }
+
+        if (event.key === "ArrowDown") {
+
+            translateY += 30;
+
+            updateImageTransform();
+
+        }
+
+    }
 
 }
 
@@ -305,28 +860,60 @@ function openImageViewer(imageSrc, imageAlt) {
    CLOSE IMAGE VIEWER
 ===================================== */
 
-function closeImageViewer(overlay) {
+function closeImageViewer() {
 
-    if (!overlay) {
+    if (!currentViewer) {
         return;
     }
 
 
-    overlay.classList.remove("active");
+    const viewer =
+        currentViewer;
+
+
+    viewer.classList.remove("active");
 
 
     document.body.classList.remove(
-        "image-viewer-open"
+        "viewer-open"
+    );
+
+
+    document.removeEventListener(
+        "mousemove",
+        dragImage
+    );
+
+    document.removeEventListener(
+        "mouseup",
+        stopDragging
+    );
+
+    document.removeEventListener(
+        "keydown",
+        handleViewerKeyboard
     );
 
 
     setTimeout(() => {
 
-        if (overlay) {
-            overlay.remove();
+        if (viewer) {
+            viewer.remove();
         }
 
-    }, 250);
+    }, 300);
+
+
+    currentViewer = null;
+    currentImage = null;
+
+
+    zoomLevel = 1;
+
+    translateX = 0;
+    translateY = 0;
+
+    isDragging = false;
 
 }
 
