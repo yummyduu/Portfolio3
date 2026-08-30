@@ -1,6 +1,7 @@
 /* =====================================
    TRISTAN TEOXON PORTFOLIO
    JAVASCRIPT
+   DARK DEVELOPER THEME
 ===================================== */
 
 
@@ -17,13 +18,15 @@ if (menuButton && navLinks) {
         navLinks.classList.toggle("active");
     });
 
-    document.querySelectorAll(".nav-links a").forEach(link => {
+    document
+        .querySelectorAll(".nav-links a")
+        .forEach(link => {
 
-        link.addEventListener("click", () => {
-            navLinks.classList.remove("active");
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+            });
+
         });
-
-    });
 
 }
 
@@ -79,33 +82,53 @@ if ("IntersectionObserver" in window) {
    ACADEMIC IMAGE ZOOM
 ===================================== */
 
-/*
-   This works for images inside:
+const academicImages = document.querySelectorAll(
+    ".academic-card .academic-image img"
+);
 
-   - Laboratories
-   - Quizzes
-   - Midterm Exams
-   - Final Exams
+academicImages.forEach(image => {
 
-   It also works for images added dynamically
-   by JavaScript.
-*/
+    image.style.cursor = "zoom-in";
 
+    image.setAttribute("tabindex", "0");
 
-document.addEventListener("click", function (event) {
-
-    const image = event.target.closest(
-        ".quiz-card img, .academic-card img, .academic-image"
+    image.setAttribute(
+        "aria-label",
+        `Open ${image.alt || "academic image"} in full screen`
     );
 
-    if (!image) {
-        return;
-    }
 
-    openImageViewer(
-        image.src,
-        image.alt || "Academic Work"
-    );
+    /* CLICK IMAGE */
+
+    image.addEventListener("click", () => {
+
+        openImageViewer(
+            image.src,
+            image.alt
+        );
+
+    });
+
+
+    /* KEYBOARD SUPPORT */
+
+    image.addEventListener("keydown", event => {
+
+        if (
+            event.key === "Enter" ||
+            event.key === " "
+        ) {
+
+            event.preventDefault();
+
+            openImageViewer(
+                image.src,
+                image.alt
+            );
+
+        }
+
+    });
 
 });
 
@@ -116,7 +139,8 @@ document.addEventListener("click", function (event) {
 
 function openImageViewer(imageSrc, imageAlt) {
 
-    // Prevent multiple viewers
+    /* Prevent multiple viewers */
+
     const existingViewer =
         document.querySelector(".image-viewer");
 
@@ -125,45 +149,76 @@ function openImageViewer(imageSrc, imageAlt) {
     }
 
 
+    /* Create overlay */
+
     const overlay =
         document.createElement("div");
 
     overlay.className = "image-viewer";
 
+    overlay.setAttribute(
+        "role",
+        "dialog"
+    );
+
+    overlay.setAttribute(
+        "aria-modal",
+        "true"
+    );
+
+    overlay.setAttribute(
+        "aria-label",
+        imageAlt || "Academic work preview"
+    );
+
 
     overlay.innerHTML = `
 
-        <button
-            class="image-viewer-close"
-            aria-label="Close image"
-        >
-            ×
-        </button>
+        <div class="image-viewer-backdrop"></div>
 
         <div class="image-viewer-content">
 
+            <button
+                class="image-viewer-close"
+                type="button"
+                aria-label="Close image"
+            >
+                ×
+            </button>
+
             <img
+                class="image-viewer-image"
                 src="${escapeHTML(imageSrc)}"
                 alt="${escapeHTML(imageAlt)}"
             >
 
-            <p>
-                ${escapeHTML(imageAlt)}
-            </p>
+            ${
+                imageAlt
+                    ? `<p class="image-viewer-caption">
+                        ${escapeHTML(imageAlt)}
+                       </p>`
+                    : ""
+            }
 
         </div>
 
     `;
 
 
+    /* Add viewer to BODY */
+
     document.body.appendChild(overlay);
 
 
-    // Prevent body from scrolling
-    document.body.classList.add("viewer-open");
+    /* Prevent background scrolling */
+
+    document.body.classList.add(
+        "image-viewer-open"
+    );
 
 
-    // Animate viewer
+    /* Animate viewer */
+
     requestAnimationFrame(() => {
 
         overlay.classList.add("active");
@@ -171,57 +226,77 @@ function openImageViewer(imageSrc, imageAlt) {
     });
 
 
+    /* Close button */
+
     const closeButton =
         overlay.querySelector(
             ".image-viewer-close"
         );
 
-
-    closeButton.addEventListener("click", () => {
-
-        closeImageViewer(overlay);
-
-    });
+    closeButton.addEventListener(
+        "click",
+        () => closeImageViewer(overlay)
+    );
 
 
-    // Click outside image to close
-    overlay.addEventListener("click", (event) => {
+    /* Close when clicking dark background */
 
-        if (
-            event.target === overlay ||
-            event.target.classList.contains(
-                "image-viewer-content"
-            )
-        ) {
+    const backdrop =
+        overlay.querySelector(
+            ".image-viewer-backdrop"
+        );
 
-            closeImageViewer(overlay);
-
-        }
-
-    });
+    backdrop.addEventListener(
+        "click",
+        () => closeImageViewer(overlay)
+    );
 
 
-    // ESC key closes viewer
-    const escapeKey = (event) => {
+    /* Prevent clicking the image from closing */
 
-        if (event.key === "Escape") {
+    const image =
+        overlay.querySelector(
+            ".image-viewer-image"
+        );
 
-            closeImageViewer(overlay);
+    image.addEventListener(
+        "click",
+        event => {
 
-            document.removeEventListener(
-                "keydown",
-                escapeKey
-            );
+            event.stopPropagation();
 
         }
+    );
 
-    };
 
+    /* ESC key */
 
     document.addEventListener(
         "keydown",
-        escapeKey
+        function escapeKey(event) {
+
+            if (event.key === "Escape") {
+
+                closeImageViewer(overlay);
+
+                document.removeEventListener(
+                    "keydown",
+                    escapeKey
+                );
+
+            }
+
+        }
     );
+
+
+    /* Focus close button */
+
+    setTimeout(() => {
+
+        closeButton.focus();
+
+    }, 100);
 
 }
 
@@ -239,7 +314,10 @@ function closeImageViewer(overlay) {
 
     overlay.classList.remove("active");
 
-    document.body.classList.remove("viewer-open");
+
+    document.body.classList.remove(
+        "image-viewer-open"
+    );
 
 
     setTimeout(() => {
@@ -262,7 +340,8 @@ function escapeHTML(text) {
     const element =
         document.createElement("div");
 
-    element.textContent = text;
+    element.textContent =
+        text || "";
 
     return element.innerHTML;
 
