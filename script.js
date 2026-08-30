@@ -8,69 +8,65 @@
    MOBILE MENU
 ===================================== */
 
-const menuButton =
-    document.querySelector(".menu-btn");
+const menuButton = document.querySelector(".menu-btn");
+const navLinks = document.querySelector(".nav-links");
 
-const navLinks =
-    document.querySelector(".nav-links");
+if (menuButton && navLinks) {
 
+    menuButton.addEventListener("click", () => {
 
-menuButton.addEventListener("click", () => {
-
-    navLinks.classList.toggle("active");
-
-});
-
-
-document
-    .querySelectorAll(".nav-links a")
-    .forEach(link => {
-
-        link.addEventListener("click", () => {
-
-            navLinks.classList.remove("active");
-
-        });
+        navLinks.classList.toggle("active");
 
     });
 
 
-/* =====================================
-   SMOOTH SCROLL REVEAL
-===================================== */
+    document
+        .querySelectorAll(".nav-links a")
+        .forEach(link => {
 
-const revealElements =
-    document.querySelectorAll(
-        ".reveal, .reveal-left, .reveal-right"
-    );
+            link.addEventListener("click", () => {
 
-
-const observer =
-    new IntersectionObserver(
-
-        (entries) => {
-
-            entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.classList.add("show");
-
-                    observer.unobserve(
-                        entry.target
-                    );
-
-                }
+                navLinks.classList.remove("active");
 
             });
 
-        },
+        });
 
-        {
-            threshold: 0.12
-        }
+}
 
-    );
+
+/* =====================================
+   SCROLL REVEAL
+===================================== */
+
+const revealElements = document.querySelectorAll(
+    ".reveal, .reveal-left, .reveal-right"
+);
+
+
+const observer = new IntersectionObserver(
+
+    (entries) => {
+
+        entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+                entry.target.classList.add("show");
+
+                observer.unobserve(entry.target);
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold: 0.12
+    }
+
+);
 
 
 revealElements.forEach(element => {
@@ -81,397 +77,139 @@ revealElements.forEach(element => {
 
 
 /* =====================================
-   QUIZ SYSTEM
+   ACADEMIC IMAGE VIEWER
 ===================================== */
 
-const quizUpload =
-    document.getElementById("quizUpload");
-
-const quizList =
-    document.getElementById("quizList");
-
-const emptyQuiz =
-    document.getElementById("emptyQuiz");
+const academicImages =
+    document.querySelectorAll(".academic-card img");
 
 
-let quizzes = [];
+academicImages.forEach(image => {
+
+    image.style.cursor = "zoom-in";
 
 
-/* =====================================
-   LOAD SAVED QUIZZES
-===================================== */
+    image.addEventListener("click", () => {
 
-window.addEventListener("load", () => {
-
-    const saved =
-        localStorage.getItem(
-            "tristanPortfolioQuizzes"
+        openImageViewer(
+            image.src,
+            image.alt
         );
 
-
-    if (saved) {
-
-        quizzes = JSON.parse(saved);
-
-        renderQuizzes();
-
-    }
+    });
 
 });
 
 
 /* =====================================
-   UPLOAD QUIZ
+   IMAGE VIEWER
 ===================================== */
 
-quizUpload.addEventListener(
-    "change",
-    function () {
+function openImageViewer(imageSrc, imageAlt) {
 
-        const file = this.files[0];
-
-
-        if (!file) {
-            return;
-        }
+    const overlay =
+        document.createElement("div");
 
 
-        const reader =
-            new FileReader();
+    overlay.className =
+        "image-viewer";
 
 
-        reader.onload = function (event) {
+    overlay.innerHTML = `
 
-            const quiz = {
+        <button
+            class="image-viewer-close"
+            aria-label="Close image"
+        >
+            ×
+        </button>
 
-                id: Date.now(),
+        <div class="image-viewer-content">
 
-                name: file.name,
-
-                type: file.type,
-
-                size: formatSize(file.size),
-
-                data: event.target.result
-
-            };
-
-
-            quizzes.push(quiz);
-
-            saveQuizzes();
-
-            renderQuizzes();
-
-        };
-
-
-        reader.readAsDataURL(file);
-
-
-        this.value = "";
-
-    }
-);
-
-
-/* =====================================
-   DISPLAY QUIZZES
-===================================== */
-
-function renderQuizzes() {
-
-    quizList.innerHTML = "";
-
-
-    if (quizzes.length === 0) {
-
-        quizList.appendChild(emptyQuiz);
-
-        return;
-
-    }
-
-
-    quizzes.forEach(quiz => {
-
-        const card =
-            document.createElement("div");
-
-
-        card.className =
-            "quiz-card reveal";
-
-
-        let icon = "📄";
-
-
-        if (quiz.type.includes("image")) {
-
-            icon = "🖼️";
-
-        }
-
-        else if (quiz.type.includes("pdf")) {
-
-            icon = "📕";
-
-        }
-
-        else if (
-            quiz.name.endsWith(".doc") ||
-            quiz.name.endsWith(".docx")
-        ) {
-
-            icon = "📘";
-
-        }
-
-
-        card.innerHTML = `
-
-            <div class="quiz-file-icon">
-                ${icon}
-            </div>
-
-            <h3>
-                ${escapeHTML(quiz.name)}
-            </h3>
+            <img
+                src="${imageSrc}"
+                alt="${escapeHTML(imageAlt)}"
+            >
 
             <p>
-                ${quiz.size}
+                ${escapeHTML(imageAlt)}
             </p>
 
-            <div class="quiz-actions">
+        </div>
 
-                <button
-                    onclick="openQuiz(${quiz.id})"
-                >
-                    Open
-                </button>
-
-                <button
-                    class="delete-btn"
-                    onclick="deleteQuiz(${quiz.id})"
-                >
-                    Delete
-                </button>
-
-            </div>
-
-        `;
+    `;
 
 
-        quizList.appendChild(card);
+    document.body.appendChild(overlay);
 
 
-        setTimeout(() => {
+    requestAnimationFrame(() => {
 
-            card.classList.add("show");
-
-        }, 50);
+        overlay.classList.add("active");
 
     });
 
-}
 
-
-/* =====================================
-   OPEN QUIZ
-===================================== */
-
-function openQuiz(id) {
-
-    const quiz =
-        quizzes.find(
-            item => item.id === id
+    const closeButton =
+        overlay.querySelector(
+            ".image-viewer-close"
         );
 
 
-    if (!quiz) {
-        return;
-    }
+    closeButton.addEventListener(
+        "click",
+        () => closeImageViewer(overlay)
+    );
 
 
-    const newWindow =
-        window.open();
+    overlay.addEventListener(
+        "click",
+        event => {
+
+            if (event.target === overlay) {
+
+                closeImageViewer(overlay);
+
+            }
+
+        }
+    );
 
 
-    if (!newWindow) {
+    document.addEventListener(
+        "keydown",
+        function escapeKey(event) {
 
-        alert(
-            "Please allow pop-ups to open your quiz."
-        );
+            if (event.key === "Escape") {
 
-        return;
+                closeImageViewer(overlay);
 
-    }
+                document.removeEventListener(
+                    "keydown",
+                    escapeKey
+                );
 
+            }
 
-    if (quiz.type.includes("image")) {
-
-        newWindow.document.write(`
-
-            <!DOCTYPE html>
-
-            <html>
-
-            <head>
-
-                <title>
-                    ${escapeHTML(quiz.name)}
-                </title>
-
-                <style>
-
-                    body {
-
-                        margin: 0;
-
-                        min-height: 100vh;
-
-                        background: #070a0d;
-
-                        display: flex;
-
-                        justify-content: center;
-
-                        align-items: center;
-
-                    }
-
-                    img {
-
-                        max-width: 95%;
-
-                        max-height: 95vh;
-
-                        object-fit: contain;
-
-                    }
-
-                </style>
-
-            </head>
-
-            <body>
-
-                <img src="${quiz.data}">
-
-            </body>
-
-            </html>
-
-        `);
-
-    }
-
-    else {
-
-        newWindow.location.href =
-            quiz.data;
-
-    }
+        }
+    );
 
 }
 
 
 /* =====================================
-   DELETE QUIZ
+   CLOSE IMAGE VIEWER
 ===================================== */
 
-function deleteQuiz(id) {
+function closeImageViewer(overlay) {
 
-    if (
-        !confirm(
-            "Remove this quiz from your portfolio?"
-        )
-    ) {
+    overlay.classList.remove("active");
 
-        return;
+    setTimeout(() => {
 
-    }
+        overlay.remove();
 
-
-    quizzes =
-        quizzes.filter(
-            quiz => quiz.id !== id
-        );
-
-
-    saveQuizzes();
-
-    renderQuizzes();
-
-}
-
-
-/* =====================================
-   SAVE
-===================================== */
-
-function saveQuizzes() {
-
-    try {
-
-        localStorage.setItem(
-
-            "tristanPortfolioQuizzes",
-
-            JSON.stringify(quizzes)
-
-        );
-
-    }
-
-    catch (error) {
-
-        alert(
-            "Storage is full. Please remove some quizzes."
-        );
-
-    }
-
-}
-
-
-/* =====================================
-   FILE SIZE
-===================================== */
-
-function formatSize(bytes) {
-
-    if (bytes === 0) {
-
-        return "0 Bytes";
-
-    }
-
-
-    const units = [
-        "Bytes",
-        "KB",
-        "MB",
-        "GB"
-    ];
-
-
-    const index =
-        Math.floor(
-            Math.log(bytes) /
-            Math.log(1024)
-        );
-
-
-    return (
-        Math.round(
-            bytes /
-            Math.pow(1024, index) *
-            100
-        ) / 100
-    )
-    + " "
-    + units[index];
+    }, 250);
 
 }
 
@@ -490,5 +228,3 @@ function escapeHTML(text) {
     return element.innerHTML;
 
 }
-
-
